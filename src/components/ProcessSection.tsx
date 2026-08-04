@@ -72,7 +72,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ playBeep }) => {
       className="w-full bg-black text-white border-t border-b border-white/10 relative py-12 sm:py-16 select-none" 
       id="section-process"
     >
-      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8">
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12 mx-auto">
         {/* Section Header */}
         <div className="mb-8 sm:mb-12">
           <div className="flex items-center gap-3 font-mono-code text-xs sm:text-sm text-[#C6FF00] mb-3">
@@ -92,8 +92,8 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ playBeep }) => {
         </div>
 
         {/* Scrollable Container Timeline */}
-        <ContainerScroll className="relative min-h-[220vh] sm:min-h-[250vh] md:min-h-[280vh] mt-8 sm:mt-12 md:mt-16">
-          <ContainerSticky className="top-24 sm:top-28 md:top-32 flex flex-nowrap gap-0 pb-12 pt-4 relative items-stretch">
+        <ContainerScroll className="relative min-h-[240vh] sm:min-h-[280vh] md:min-h-[320vh] mt-8 sm:mt-12 md:mt-16">
+          <ContainerSticky className="flex flex-nowrap gap-0 pb-12 pt-4 relative items-stretch">
             {PROCESS_STEPS.map((step, index) => {
               const Icon = step.icon;
               return (
@@ -102,46 +102,50 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ playBeep }) => {
                   itemsLength={PROCESS_STEPS.length}
                   index={index}
                   variant="cyber"
+                  size="lg"
                   onClick={() => playBeep(650 + index * 100)}
-                  className="w-[calc(100%-60px)] sm:w-[calc(100%-78px)] md:w-[calc(100%-96px)] shrink-0 min-w-0 border-2 border-white/15 bg-zinc-950/95 hover:border-[#C6FF00] transition-colors cursor-pointer rounded-none group shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
+                  className="w-full sm:w-[70%] min-w-full sm:min-w-[70%] sm:max-w-[70%] shrink-0 border-2 border-white/15 bg-zinc-950/95 hover:border-[#C6FF00] transition-colors cursor-pointer rounded-none group shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
                 >
-                  <ProcessCardTitle className="p-4 sm:p-6 border-r border-white/15 bg-black/80 flex flex-col justify-between shrink-0">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#C6FF00] text-black font-space font-bold text-xs sm:text-sm flex justify-center items-center shadow-[0_0_15px_rgba(198,255,0,0.3)] shrink-0">
+                  <ProcessCardTitle className="p-3 sm:p-5 md:p-6 border-r border-white/15 bg-black/80 flex flex-col justify-between shrink-0 w-14 sm:w-20 md:w-24">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#C6FF00] text-black font-space font-bold text-xs sm:text-sm flex justify-center items-center shadow-[0_0_15px_rgba(198,255,0,0.3)] shrink-0">
                       {step.number}
                     </div>
-                    <div className="mt-8 text-white/40 group-hover:text-[#C6FF00] transition-colors">
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <div className="mt-4 sm:mt-8 text-white/40 group-hover:text-[#C6FF00] transition-colors">
+                      <Icon className="w-4 h-4 sm:w-6 sm:h-6" />
                     </div>
                   </ProcessCardTitle>
 
-                  <ProcessCardBody className="flex flex-col justify-between p-4 sm:p-7 gap-4 w-full overflow-hidden">
+                  <ProcessCardBody className="flex flex-col justify-between p-3.5 sm:p-6 md:p-7 gap-3 sm:gap-4 w-full overflow-hidden">
                     <div>
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="font-mono-code text-[10px] text-[#C6FF00] bg-[#C6FF00]/10 border border-[#C6FF00]/30 px-2 py-0.5 uppercase tracking-wider">
+                      <div className="flex items-center justify-between gap-2 mb-1.5 sm:mb-2">
+                        <span className="font-mono-code text-[9px] sm:text-[10px] text-[#C6FF00] bg-[#C6FF00]/10 border border-[#C6FF00]/30 px-2 py-0.5 uppercase tracking-wider">
                           {step.code}
+                        </span>
+                        <span className="font-mono-code text-[10px] text-zinc-500 uppercase tracking-wider hidden sm:inline-block">
+                          PHASE 0{index + 1} // 04
                         </span>
                       </div>
 
-                      <h3 className="font-syne font-extrabold text-lg sm:text-2xl md:text-3xl text-white uppercase tracking-tight mb-2 group-hover:text-[#C6FF00] transition-colors leading-none truncate sm:whitespace-normal">
+                      <h3 className="font-syne font-extrabold text-base sm:text-2xl md:text-3xl text-white uppercase tracking-tight mb-1.5 sm:mb-2 group-hover:text-[#C6FF00] transition-colors leading-tight break-words">
                         {step.title}
                       </h3>
 
-                      <p className="font-mono-code text-[11px] sm:text-xs text-zinc-400 mb-2 sm:mb-3">
+                      <p className="font-mono-code text-[10px] sm:text-xs text-zinc-400 mb-2 sm:mb-3">
                         {step.subtitle}
                       </p>
 
-                      <p className="font-space font-light text-xs sm:text-sm text-zinc-300 leading-relaxed mb-3 sm:mb-4 line-clamp-3 sm:line-clamp-none">
+                      <p className="font-space font-light text-xs sm:text-sm text-zinc-300 leading-relaxed mb-3 sm:mb-4">
                         {step.description}
                       </p>
                     </div>
 
-                    <div className="pt-3 border-t border-white/10 space-y-1.5">
-                      <div className="font-mono-code text-[10px] text-zinc-500 uppercase tracking-wider mb-1.5">
+                    <div className="pt-2.5 sm:pt-3 border-t border-white/10 space-y-1.5">
+                      <div className="font-mono-code text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-wider mb-1 sm:mb-1.5">
                         DELIVERABLES:
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                         {step.deliverables.map((item, i) => (
-                          <div key={i} className="flex items-center gap-1.5 font-mono-code text-[11px] text-zinc-300 bg-white/5 px-2 py-1 border border-white/5">
+                          <div key={i} className="flex items-center gap-1.5 font-mono-code text-[10px] sm:text-[11px] text-zinc-300 bg-white/5 px-2 py-1 border border-white/5">
                             <CheckCircle2 className="w-3 h-3 text-[#C6FF00] shrink-0" />
                             <span className="truncate">{item}</span>
                           </div>

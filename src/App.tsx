@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
+import { LogoStripSection } from './components/LogoStripSection';
 import { ProjectCardsSection } from './components/ProjectCardsSection';
 import { ProcessSection } from './components/ProcessSection';
+import { TestimonialsSection } from './components/TestimonialsSection';
+import { TeamSection } from './components/TeamSection';
 import { AboutSection } from './components/AboutSection';
 import { Component as SilkBackground } from './components/ui/silk-background-animation';
 import { playBeep as triggerBeep } from './utils/audio';
@@ -15,7 +18,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black text-white relative font-geist selection:bg-[#C6FF00] selection:text-black flex flex-col justify-between overflow-x-hidden">
+    <div className="min-h-screen w-full bg-black text-white relative font-geist selection:bg-[#C6FF00] selection:text-black flex flex-col justify-between overflow-x-clip">
       {/* Silk Background Animation */}
       <SilkBackground isBackgroundOnly={true} />
 
@@ -43,6 +46,11 @@ export default function App() {
             playBeep={playBeep}
           />
 
+          {/* Dynamic Wave Logo Ribbon Strip */}
+          <LogoStripSection
+            playBeep={playBeep}
+          />
+
           {/* Horizontal Scroll Track / Project Cards Section Below Hero */}
           <ProjectCardsSection
             playBeep={playBeep}
@@ -50,6 +58,16 @@ export default function App() {
 
           {/* New Process Section */}
           <ProcessSection
+            playBeep={playBeep}
+          />
+
+          {/* Cassette Tape Testimonials Section */}
+          <TestimonialsSection
+            playBeep={playBeep}
+          />
+
+          {/* Team Showcase Section */}
+          <TeamSection
             playBeep={playBeep}
           />
 

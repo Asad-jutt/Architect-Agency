@@ -26,12 +26,12 @@ const processCardVariants = cva("flex border backdrop-blur-lg transition-all dur
       sm: "min-w-[25%] max-w-[25%]",
       md: "min-w-[50%] max-w-[50%]",
       lg: "min-w-[75%] max-w-[75%]",
-      xl: "min-w-full max-w-full",
+      xl: "min-w-full max-w-full w-full",
     },
   },
   defaultVariants: {
     variant: "cyber",
-    size: "md",
+    size: "xl",
   },
 })
 
@@ -68,12 +68,13 @@ export const ContainerScroll = ({
   const scrollRef = React.useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: scrollRef,
+    offset: ["start start", "end end"],
   })
   return (
     <ContainerScrollContext.Provider value={{ scrollYProgress }}>
       <div
         ref={scrollRef}
-        className={cn("relative min-h-[120vh]", className)}
+        className={cn("relative min-h-[220vh]", className)}
         {...props}
       >
         {children}
@@ -88,7 +89,7 @@ export const ContainerSticky = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("sticky left-0 top-0 w-full overflow-hidden", className)}
+    className={cn("sticky top-5 w-full z-20 overflow-hidden", className)}
     {...props}
   />
 ))
@@ -125,24 +126,24 @@ export const ProcessCard: React.FC<ProcessCardProps> = ({
 }) => {
   const { scrollYProgress } = useContainerScrollContext()
   
-  // Animate cards 1..N sequentially in the range 0 -> 0.85 of scroll progress
+  // Animate cards 1..(itemsLength-1) sequentially in range 0.05 -> 0.80
   const animCount = Math.max(1, itemsLength - 1)
-  const rangePerCard = 0.85 / animCount
-  const start = (index - 1) * rangePerCard
+  const rangePerCard = 0.75 / animCount
+  const start = 0.05 + (index - 1) * rangePerCard
   const end = start + rangePerCard
 
   const [ref, { width }] = useMeasure()
 
-  const innerWidth = typeof window !== 'undefined' ? window.innerWidth : 1200
   const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1200
-  const stackOffset = screenWidth < 640 ? 20 : screenWidth < 1024 ? 26 : 32
+  const cardWidth = width && width > 0 ? width : screenWidth
+  const stackOffset = screenWidth < 640 ? 12 : screenWidth < 1024 ? 20 : 28
 
-  const targetX = -((width ?? 0) * index) + stackOffset * index
+  const targetX = -(cardWidth * index) + (stackOffset * index)
 
   const x = useTransform(
     scrollYProgress,
     [Math.max(0, start), Math.min(1, end)],
-    [innerWidth, targetX]
+    [screenWidth, targetX]
   )
 
   return (

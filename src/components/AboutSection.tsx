@@ -10,7 +10,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ playBeep }) => {
     <section className="w-full bg-black border-t border-white/10 select-none overflow-hidden relative" id="section-about">
       <div className="w-full flex flex-col md:flex-row min-h-[450px] md:min-h-[550px]">
         {/* Left Half: Visual Anchor */}
-        <div className="w-full md:w-1/2 relative min-h-[260px] md:min-h-[520px] bg-zinc-950 flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-white/10 group">
+        <div className="w-full md:w-[35%] relative min-h-[260px] md:min-h-[520px] bg-zinc-950 flex items-center justify-center overflow-hidden border-b md:border-b-0 md:border-r border-white/10 group">
           {/* Background Grayscale Brutalist Image */}
           <img
             src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop"
@@ -33,7 +33,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ playBeep }) => {
         </div>
 
         {/* Right Half: Content Canvas */}
-        <div className="w-full md:w-1/2 bg-black text-white p-5 sm:p-8 md:p-10 lg:p-12 pr-5 sm:pr-8 md:pr-10 flex flex-col justify-between relative overflow-hidden border-t md:border-t-0 border-white/10">
+        <div className="w-full md:w-[65%] bg-black text-white p-5 sm:p-8 md:p-10 lg:p-12 pr-5 sm:pr-8 md:pr-10 flex flex-col justify-between relative overflow-hidden border-t md:border-t-0 border-white/10">
           <div className="space-y-5 max-w-xl">
             {/* Staircase Headline */}
             <div className="space-y-1.5 uppercase select-none">
@@ -41,7 +41,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ playBeep }) => {
                 I BUILD
               </h2>
               
-              <div className="inline-block px-2.5 sm:px-3 py-0.5 my-0.5 bg-white/5 border border-white/15 max-w-full overflow-hidden">
+              <div className="inline-block px-2.5 sm:px-3 py-0.5 my-0.5 bg-white/5 border border-white/20 max-w-full overflow-hidden">
                 <span className="font-syne font-black text-base sm:text-2xl md:text-3xl lg:text-4xl leading-[0.9] text-zinc-400 tracking-tight whitespace-nowrap">
                   THE INTERNET&apos;S
                 </span>

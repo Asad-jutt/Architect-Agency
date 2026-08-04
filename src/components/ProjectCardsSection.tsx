@@ -1,8 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ArrowUpRight,
-  ChevronLeft,
-  ChevronRight,
   Sliders,
   Maximize2,
   Cpu,
@@ -10,7 +8,9 @@ import {
   Activity,
   Terminal,
   X,
+  Sparkles,
 } from 'lucide-react';
+import { CardCarousel } from './ui/card-carousel';
 
 interface ProjectCardData {
   id: string;
@@ -73,94 +73,25 @@ interface ProjectCardsSectionProps {
 export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
   playBeep,
 }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
   const [activeProject, setActiveProject] = useState<ProjectCardData | null>(null);
   const [modalTab, setModalTab] = useState<'overview' | 'specs' | 'metrics'>('overview');
   const [isZoomed, setIsZoomed] = useState(false);
 
-  const checkScrollability = () => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    setCanScrollLeft(scrollLeft > 10);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-  };
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (el) {
-      el.addEventListener('scroll', checkScrollability);
-      checkScrollability();
-    }
-    return () => {
-      if (el) el.removeEventListener('scroll', checkScrollability);
-    };
-  }, []);
-
-  const handleScroll = (direction: 'left' | 'right') => {
-    playBeep(700);
-    if (!scrollRef.current) return;
-    const scrollAmount = 360;
-    scrollRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
-  };
-
   return (
     <section className="w-full min-h-screen flex flex-col justify-center bg-black text-white border-t border-b border-white/10 relative py-6 sm:py-8 md:py-10 select-none overflow-hidden" id="section-project-cards">
       {/* Header bar with controls */}
-      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono-code">
+      <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 mb-4 flex items-center justify-between gap-3 font-mono-code">
         <div className="flex items-center gap-3">
           <span className="w-2.5 h-2.5 bg-[#C6FF00] inline-block animate-pulse" />
           <h2 className="text-xs sm:text-sm font-bold tracking-[2px] text-white/80 uppercase">
-            SELECTED_WORKS // HORIZONTAL_SCROLL_TRACK
+            SELECTED_WORKS // CAROUSEL_TRACK
           </h2>
-        </div>
-
-        {/* Scroll navigation controls */}
-        <div className="flex items-center gap-3 self-end sm:self-auto">
-          <span className="text-xs text-white/40 hidden sm:inline-block mr-2">
-            SWIPE OR USE NAVIGATION [← →]
-          </span>
-          <button
-            onClick={() => handleScroll('left')}
-            disabled={!canScrollLeft}
-            className={`p-1.5 sm:p-2 border transition-colors ${
-              canScrollLeft
-                ? 'border-white/30 text-white hover:border-[#C6FF00] hover:text-[#C6FF00] cursor-pointer'
-                : 'border-white/10 text-white/20 cursor-not-allowed'
-            }`}
-            title="Scroll Left"
-            id="btn-scroll-left"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => handleScroll('right')}
-            disabled={!canScrollRight}
-            className={`p-1.5 sm:p-2 border transition-colors ${
-              canScrollRight
-                ? 'border-white/30 text-white hover:border-[#C6FF00] hover:text-[#C6FF00] cursor-pointer'
-                : 'border-white/10 text-white/20 cursor-not-allowed'
-            }`}
-            title="Scroll Right"
-            id="btn-scroll-right"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
         </div>
       </div>
 
-      {/* Horizontal Track Container */}
-      <div className="w-full relative">
-        <div
-          ref={scrollRef}
-          className="flex overflow-x-auto scrollbar-none snap-x snap-mandatory scroll-smooth border-t border-b border-white/10 bg-black"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
+      {/* Card Carousel Track Container */}
+      <div className="w-full relative px-2 sm:px-4">
+        <CardCarousel autoplayDelay={3000} showPagination={true} showNavigation={true}>
           {PROJECT_CARDS.map((card) => (
             <div
               key={card.id}
@@ -168,7 +99,7 @@ export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
                 playBeep(850);
                 setActiveProject(card);
               }}
-              className="flex-none w-[230px] sm:w-[280px] md:w-[320px] h-[320px] sm:h-[370px] md:h-[410px] border-r border-white/10 bg-black relative flex flex-col justify-between group snap-start transition-colors duration-300 hover:bg-zinc-950 cursor-pointer"
+              className="w-full h-[360px] sm:h-[400px] md:h-[430px] border-2 border-white/15 hover:border-[#C6FF00] bg-zinc-950 relative flex flex-col justify-between group transition-all duration-300 hover:scale-[1.02] cursor-pointer shadow-[0_15px_30px_rgba(0,0,0,0.8)]"
               id={`card-${card.id}`}
             >
               {/* Top 58%: Project Image Container */}
@@ -229,17 +160,17 @@ export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
                       playBeep(850);
                       setActiveProject(card);
                     }}
-                    className="w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-[#C6FF00] text-black flex items-center justify-center transition-transform duration-300 hover:scale-110 active:scale-95 cursor-pointer brutalist-shadow-black hover:rotate-12 shrink-0"
+                    className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-[#C6FF00] text-black flex items-center justify-center transition-transform duration-300 hover:scale-110 active:scale-95 cursor-pointer brutalist-shadow-black hover:rotate-12 shrink-0"
                     title={`Inspect ${card.title}`}
                     id={`btn-open-${card.id}`}
                   >
-                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 stroke-[2.5]" />
+                    <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
                   </button>
                 </div>
               </div>
             </div>
           ))}
-        </div>
+        </CardCarousel>
       </div>
 
       {/* High-Fidelity Immersive Electric Cyan Project Details Modal */}
