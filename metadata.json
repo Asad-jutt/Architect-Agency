@@ -1,0 +1,6 @@
+{
+  "name": "ARCHITECT.EXE Portfolio",
+  "description": "Brutalist high-performance portfolio hero section with interactive system commands, live status monitoring, and cybernetic aesthetic.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
