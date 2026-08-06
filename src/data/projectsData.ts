@@ -1,5 +1,6 @@
 export interface ProjectData {
   id: string;
+  slug: string;
   number: string;
   title: string;
   subtitle: string;
@@ -32,6 +33,7 @@ export interface ProjectData {
 export const PROJECTS_LIST: ProjectData[] = [
   {
     id: 'project-void',
+    slug: 'project-void',
     number: '01',
     title: 'PROJECT VOID',
     subtitle: 'Monochromatic Spatial Architecture',
@@ -68,6 +70,7 @@ export const PROJECTS_LIST: ProjectData[] = [
   },
   {
     id: 'system-core',
+    slug: 'system-core',
     number: '02',
     title: 'SYSTEM CORE',
     subtitle: 'High-Frequency Cybernetic Telemetry',
@@ -104,6 +107,7 @@ export const PROJECTS_LIST: ProjectData[] = [
   },
   {
     id: 'liquid-metal',
+    slug: 'liquid-metal',
     number: '03',
     title: 'LIQUID METAL',
     subtitle: 'Generative Fluid Dynamics Simulation',
@@ -140,6 +144,7 @@ export const PROJECTS_LIST: ProjectData[] = [
   },
   {
     id: 'neural-grid',
+    slug: 'neural-grid',
     number: '04',
     title: 'NEURAL GRID',
     subtitle: 'Autonomous Knowledge Graph Agent Interface',

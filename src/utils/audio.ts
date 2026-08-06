@@ -7,3 +7,6 @@ export function playBeep(frequency = 600, duration = 0.05, soundEnabled = false)
   // Sound is disabled across the entire website
   return;
 }
+
+export const noopBeep = () => {};
+

@@ -1,0 +1,70 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Navbar } from '../../components/Navbar';
+import { ProjectDetailPage } from '../../components/pages/ProjectDetailPage';
+import { Footer } from '../../components/ui/modem-animated-footer';
+import { PROJECTS_LIST } from '../../data/projectsData';
+import { SITE_URL, SITE_NAME } from '../../data/site';
+
+export function getStaticPaths() {
+  return PROJECTS_LIST.map((project) => ({
+    params: { slug: project.slug || project.id },
+    props: { project, projects: PROJECTS_LIST },
+  }));
+}
+
+const { project, projects } = Astro.props;
+
+const title = `${project.title} | ${project.subtitle} | Case Study by ${SITE_NAME}`;
+const description = `${project.title} — ${project.subtitle}. ${project.description} Built with ${project.techSpecs.framework}.`;
+const pageUrl = `${SITE_URL}/projects/${project.slug || project.id}`;
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: project.title,
+  headline: project.title,
+  description: project.description,
+  image: project.imageUrl,
+  url: pageUrl,
+  datePublished: `${project.year}-01-01`,
+  author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+  publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+  inLanguage: 'en',
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Selected Works', item: `${SITE_URL}/works` },
+    { '@type': 'ListItem', position: 3, name: project.title, item: pageUrl },
+  ],
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  image={project.imageUrl}
+  type="article"
+  jsonLd={[articleLd, breadcrumbLd]}
+>
+  <div class="min-h-screen w-full bg-black text-white relative flex flex-col justify-between overflow-x-clip">
+    <div class="relative z-10 flex-1 flex flex-col">
+      <Navbar client:load pathname={Astro.url.pathname} />
+
+      <main class="flex-1 flex flex-col">
+        <ProjectDetailPage
+          client:load
+          project={project}
+          projects={projects}
+        />
+      </main>
+    </div>
+    <div class="relative z-10">
+      <Footer client:load />
+    </div>
+  </div>
+</Layout>

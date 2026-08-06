@@ -196,7 +196,12 @@ function MemberRow({
 }) {
   const isActive = hoveredId === member.id;
   const isDimmed = hoveredId !== null && !isActive;
-  const hasSocial = member.social?.twitter || member.social?.linkedin || member.social?.instagram || member.social?.behance;
+  const isRealUrl = (url?: string) => !!url && url.trim() !== '' && url !== '#';
+  const hasSocial =
+    isRealUrl(member.social?.twitter) ||
+    isRealUrl(member.social?.linkedin) ||
+    isRealUrl(member.social?.instagram) ||
+    isRealUrl(member.social?.behance);
 
   return (
     <div
@@ -234,7 +239,7 @@ function MemberRow({
                 : 'opacity-0 -translate-x-2 pointer-events-none',
             )}
           >
-            {member.social?.twitter && (
+            {isRealUrl(member.social?.twitter) && (
               <a
                 href={member.social.twitter}
                 target="_blank"
@@ -246,7 +251,7 @@ function MemberRow({
                 <FaTwitter size={12} />
               </a>
             )}
-            {member.social?.linkedin && (
+            {isRealUrl(member.social?.linkedin) && (
               <a
                 href={member.social.linkedin}
                 target="_blank"
@@ -258,7 +263,7 @@ function MemberRow({
                 <FaLinkedinIn size={12} />
               </a>
             )}
-            {member.social?.instagram && (
+            {isRealUrl(member.social?.instagram) && (
               <a
                 href={member.social.instagram}
                 target="_blank"
@@ -270,7 +275,7 @@ function MemberRow({
                 <FaInstagram size={12} />
               </a>
             )}
-            {member.social?.behance && (
+            {isRealUrl(member.social?.behance) && (
               <a
                 href={member.social.behance}
                 target="_blank"

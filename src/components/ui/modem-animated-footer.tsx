@@ -81,6 +81,8 @@ export const Footer: React.FC<FooterProps> = ({
       const target = document.querySelector(href);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.href = `/${href}`;
       }
     }
   };

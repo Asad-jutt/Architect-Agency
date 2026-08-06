@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, ChevronRight, Terminal, RefreshCw } from 'lucide-react';
 import { Component as SilkBackground } from './ui/silk-background-animation';
+import { requestSectionScroll } from '../utils/scroll';
 
 interface HeroSectionProps {
-  playBeep: (freq?: number) => void;
+  playBeep?: (freq?: number) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
-  playBeep,
+  playBeep = () => {},
 }) => {
   const [latency, setLatency] = useState(12);
 
@@ -21,10 +22,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    requestSectionScroll(sectionId);
   };
 
   return (

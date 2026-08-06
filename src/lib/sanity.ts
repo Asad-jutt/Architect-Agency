@@ -52,6 +52,7 @@ function mapProjectToLocal(doc: any): ProjectData | null {
   const category = tags[0] || 'WEBFLOW';
   return {
     id: doc._id || `sanity-${doc.title}`,
+    slug: doc.slug?.current || doc._id || `sanity-${doc.title}`,
     number: doc.number || '--',
     title: doc.title.toUpperCase(),
     subtitle: doc.subtitle || '',

@@ -108,7 +108,8 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({
     <div className="w-full relative">
       <style>{css}</style>
       <Swiper
-        spaceBetween={40}
+        spaceBetween={24}
+        speed={600}
         autoplay={{
           delay: autoplayDelay,
           disableOnInteraction: false,
@@ -117,13 +118,13 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({
         effect={"coverflow"}
         grabCursor={true}
         centeredSlides={true}
-        loop={true}
+        rewind={true}
         slidesPerView={"auto"}
         coverflowEffect={{
           rotate: 10,
           stretch: 0,
-          depth: 100,
-          modifier: 2,
+          depth: 60,
+          modifier: 1,
           slideShadows: false,
         }}
         pagination={showPagination ? { clickable: true } : false}
@@ -142,8 +143,8 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({
             {child}
           </SwiperSlide>
         ))}
-        <div className="swiper-button-prev !hidden sm:!flex" />
-        <div className="swiper-button-next !hidden sm:!flex" />
+        <div className="swiper-button-prev hidden sm:flex" />
+        <div className="swiper-button-next hidden sm:flex" />
       </Swiper>
     </div>
   )

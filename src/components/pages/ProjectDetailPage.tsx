@@ -14,25 +14,20 @@ import {
   Shield,
   Sparkles,
 } from 'lucide-react';
-import { ProjectData, PROJECTS_LIST } from '../data/projectsData';
+import { ProjectData, PROJECTS_LIST } from '../../data/projectsData';
 
 interface ProjectDetailPageProps {
-  projectId: string;
-  onNavigateBack: () => void;
-  onSelectProject: (id: string) => void;
-  playBeep?: (freq?: number) => void;
+  project: ProjectData;
   projects?: ProjectData[];
+  playBeep?: (freq?: number) => void;
 }
 
 export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
-  projectId,
-  onNavigateBack,
-  onSelectProject,
-  playBeep,
+  project,
   projects,
+  playBeep,
 }) => {
   const projectList = projects && projects.length > 0 ? projects : PROJECTS_LIST;
-  const project = projectList.find((p) => p.id === projectId) || projectList[0];
   const [selectedImage, setSelectedImage] = useState<string>(project.imageUrl);
   const [activeTab, setActiveTab] = useState<'overview' | 'challenge' | 'specs' | 'gallery'>('overview');
   const [isZoomed, setIsZoomed] = useState(false);
@@ -45,10 +40,15 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setSelectedImage(project.imageUrl);
-  }, [projectId]);
+  }, [project.id]);
 
   const triggerBeep = (freq = 700) => {
     if (playBeep) playBeep(freq);
+  };
+
+  const navigateToProject = (p: ProjectData) => {
+    triggerBeep(700);
+    window.location.href = `/projects/${p.slug || p.id}`;
   };
 
   return (
@@ -57,17 +57,15 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         
         {/* Top Navigation Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-4">
-          <button
-            onClick={() => {
-              triggerBeep(500);
-              onNavigateBack();
-            }}
-            className="group flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#12130F] border border-white/20 hover:border-[#C6FF00] text-zinc-300 hover:text-[#C6FF00] transition-all rounded duration-200 cursor-pointer text-xs sm:text-sm font-bold uppercase"
+          <a
+            href="/works"
+            onClick={() => triggerBeep(500)}
+            className="group flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#12130F] border border-white/20 hover:border-[#C6FF00] text-zinc-300 hover:text-[#C6FF00] transition-all rounded duration-200 cursor-pointer text-xs sm:text-sm font-bold uppercase no-underline"
             id="btn-back-to-works"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             <span>← BACK_TO_ALL_WORKS</span>
-          </button>
+          </a>
 
           <div className="flex items-center gap-2 text-xs text-[#C6FF00] font-bold">
             <span className="w-2 h-2 rounded-full bg-[#C6FF00] animate-pulse" />
@@ -297,12 +295,10 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
 
         {/* Next / Previous Collection Items Navigation */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-white/15">
-          <button
-            onClick={() => {
-              triggerBeep(700);
-              onSelectProject(prevProject.id);
-            }}
-            className="group p-5 bg-[#12130F] border border-white/10 hover:border-[#C6FF00] text-left transition-all duration-300 flex items-center gap-4 cursor-pointer"
+          <a
+            href={`/projects/${prevProject.slug || prevProject.id}`}
+            onClick={() => triggerBeep(700)}
+            className="group p-5 bg-[#12130F] border border-white/10 hover:border-[#C6FF00] text-left transition-all duration-300 flex items-center gap-4 cursor-pointer no-underline"
             id="btn-prev-project"
           >
             <ArrowLeft className="w-5 h-5 text-[#C6FF00] group-hover:-translate-x-1 transition-transform" />
@@ -312,14 +308,12 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                 {prevProject.title}
               </span>
             </div>
-          </button>
+          </a>
 
-          <button
-            onClick={() => {
-              triggerBeep(700);
-              onSelectProject(nextProject.id);
-            }}
-            className="group p-5 bg-[#12130F] border border-white/10 hover:border-[#C6FF00] text-right transition-all duration-300 flex items-center justify-end gap-4 cursor-pointer"
+          <a
+            href={`/projects/${nextProject.slug || nextProject.id}`}
+            onClick={() => triggerBeep(700)}
+            className="group p-5 bg-[#12130F] border border-white/10 hover:border-[#C6FF00] text-right transition-all duration-300 flex items-center justify-end gap-4 cursor-pointer no-underline"
             id="btn-next-project"
           >
             <div>
@@ -329,7 +323,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
               </span>
             </div>
             <ArrowRight className="w-5 h-5 text-[#C6FF00] group-hover:translate-x-1 transition-transform" />
-          </button>
+          </a>
         </div>
 
       </div>

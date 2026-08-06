@@ -36,7 +36,7 @@ export const FaqCard: React.FC<FaqItem> = ({ question, answer, category = 'SYSTE
         <span className="text-zinc-500 font-medium">// ARCHITECT.FAQ</span>
       </div>
 
-      <h3 className="text-sm sm:text-base font-syne font-bold text-white group-hover:text-[#C6FF00] transition-colors leading-snug faq-title">
+      <h3 className="text-sm sm:text-base font-syne font-bold text-white group-hover:text-[#C6FF00] transition-colors leading-snug faq-title uppercase">
         {question}
       </h3>
 
@@ -76,7 +76,7 @@ export const HorizontalScroller: React.FC<{
   );
 };
 
-const DEFAULT_FAQ_DATA: FaqData = {
+export const DEFAULT_FAQ_DATA: FaqData = {
   mainTitle: 'FAQ',
   mainSubtitle: 'SYSTEM QUERY DIRECTORY // TRANSPARENT PROTOCOLS & ARCHITECTURAL SPECS',
   rows: [
@@ -87,25 +87,25 @@ const DEFAULT_FAQ_DATA: FaqData = {
       faqItems: [
         {
           id: 'q1',
-          question: 'WHAT IS ARCHITECT.EXE & HOW DO WE WORK?',
+          question: 'What is ARCHITECT.EXE and how do we work?',
           answer: 'We are a high-octane Webflow & web development agency specializing in unhinged creativity, liquid animations, and performance-first engineering.',
           category: 'AGENCY_PROFILE'
         },
         {
           id: 'q2',
-          question: 'HOW FAST CAN A PROJECT BE DELIVERED?',
+          question: 'How fast can a project be delivered?',
           answer: 'Standard sprints take 2 to 4 weeks. High-priority rapid deployments can be expedited in 10-day shockwave cycles with dedicated operative pods.',
           category: 'TIMELINE'
         },
         {
           id: 'q3',
-          question: 'DO YOU BUILD CUSTOM WEBFLOW INTERACTIVE ENGINES?',
+          question: 'Do you build custom Webflow interactive engines?',
           answer: 'Yes. We build bespoke GSAP, Three.js, WebGL, and custom JS integrations seamlessly inside Webflow CMS and React environments.',
           category: 'ENGINEERING'
         },
         {
           id: 'q7',
-          question: 'CAN WE MIGRATE FROM WORDPRESS OR NEXT.JS?',
+          question: 'Can we migrate from WordPress or Next.js?',
           answer: 'Effortlessly. We handle full CMS schema migrations, 301 redirects, SEO preservation, and structural re-platforming without downtime.',
           category: 'MIGRATION'
         }
@@ -118,25 +118,25 @@ const DEFAULT_FAQ_DATA: FaqData = {
       faqItems: [
         {
           id: 'q4',
-          question: 'WILL MY WEBSITE BE LIGHTNING FAST ON MOBILE?',
+          question: 'Will my website be lightning fast on mobile?',
           answer: 'Guaranteed 90+ Lighthouse mobile performance scores. We optimize clean DOM trees, compressed webp/avif, and GPU-accelerated CSS.',
           category: 'PERFORMANCE'
         },
         {
           id: 'q5',
-          question: 'WHO OWNS THE CODE & WEBFLOW ASSETS?',
+          question: 'Who owns the code and Webflow assets?',
           answer: 'You retain 100% full ownership of all Webflow projects, custom code scripts, design tokens, and source Figma files upon project delivery.',
           category: 'OWNERSHIP'
         },
         {
           id: 'q6',
-          question: 'DO YOU PROVIDE POST-LAUNCH MAINTENANCE?',
+          question: 'Do you provide post-launch maintenance?',
           answer: 'Yes. Our Operative Retainer program offers continuous updates, CMS management, speed audits, and ongoing animation enhancements.',
           category: 'RETAINER'
         },
         {
           id: 'q8',
-          question: 'HOW DO WE START A PROJECT WITH ARCHITECT.EXE?',
+          question: 'How do we start a project with ARCHITECT.EXE?',
           answer: 'Hit the INITIATE_PROJECT button in the navbar or trigger the contact terminal below to schedule a 15-minute technical discovery session.',
           category: 'ONBOARDING'
         }

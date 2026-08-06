@@ -3,10 +3,10 @@ import TeamShowcase from './ui/team-showcase';
 import { Users } from 'lucide-react';
 
 interface TeamSectionProps {
-  playBeep: (freq?: number) => void;
+  playBeep?: (freq?: number) => void;
 }
 
-export const TeamSection: React.FC<TeamSectionProps> = ({ playBeep }) => {
+export const TeamSection: React.FC<TeamSectionProps> = ({ playBeep = () => {} }) => {
   return (
     <section 
       className="w-full bg-black text-white border-t border-b border-white/10 relative py-12 sm:py-16 md:py-20 select-none overflow-hidden" 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Disc } from 'lucide-react';
 
 interface TestimonialsSectionProps {
-  playBeep: (freq?: number) => void;
+  playBeep?: (freq?: number) => void;
 }
 
 interface CassetteData {
@@ -69,7 +69,7 @@ const CASSETTES: CassetteData[] = [
   },
 ];
 
-export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ playBeep }) => {
+export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ playBeep = () => {} }) => {
   return (
     <section 
       className="w-full bg-black text-white border-t border-b border-white/10 relative py-12 sm:py-16 md:py-20 select-none overflow-hidden" 

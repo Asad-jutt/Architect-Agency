@@ -1,9 +1,72 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import App from '../App.tsx';
+import { Navbar } from '../components/Navbar';
+import { HeroSection } from '../components/HeroSection';
+import { LogoStripSection } from '../components/LogoStripSection';
+import { ProjectCardsSection } from '../components/ProjectCardsSection';
+import { ProcessSection } from '../components/ProcessSection';
+import { TechStackSection } from '../components/TechStackSection';
+import { TestimonialsSection } from '../components/TestimonialsSection';
+import { TeamSection } from '../components/TeamSection';
+import { AboutSection } from '../components/AboutSection';
+import { FaqSection } from '../components/ui/habit-faq-scroller';
+import { Footer } from '../components/ui/modem-animated-footer';
+import MotionProvider from '../components/MotionProvider';
+import { SITE_URL } from '../data/site';
+import { DEFAULT_FAQ_DATA } from '../components/ui/habit-faq-scroller';
+
+const title = 'ARCHITECT.EXE | High-Performance Webflow & React Development Agency';
+const description =
+  'ARCHITECT.EXE designs and builds brutalist, high-performance websites with Webflow, React, Three.js and WebGL — liquid animations, 90+ Lighthouse scores, and unapologetic visual identity.';
+
+const faqs = DEFAULT_FAQ_DATA.rows.flatMap((row) => row.faqItems);
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+  })),
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+  ],
+};
+
+const jsonLd = [faqLd, breadcrumbLd];
 ---
 
-<Layout title="ARCHITECT.EXE // Brutalist Astro Portfolio">
-  <App client:only="react" />
-</Layout>
+<Layout title={title} description={description} jsonLd={jsonLd}>
+  <MotionProvider client:load />
 
+  <div class="min-h-screen w-full bg-black text-white relative font-geist selection:bg-[#C6FF00] selection:text-black flex flex-col justify-between overflow-x-clip">
+    <div
+      class="fixed inset-0 pointer-events-none opacity-[0.03] z-0"
+      style="background-image: radial-gradient(#C6FF00 1px, transparent 1px), linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px); background-size: 40px 40px;"
+    />
+
+    <div class="relative z-10 flex-1 flex flex-col justify-between">
+      <Navbar client:load pathname="/" />
+
+      <main class="flex-1 flex flex-col">
+        <HeroSection client:load />
+        <LogoStripSection client:visible />
+        <ProjectCardsSection client:visible />
+        <ProcessSection client:visible />
+        <TechStackSection client:visible />
+        <TestimonialsSection client:visible />
+        <AboutSection client:visible />
+        <TeamSection client:visible />
+        <FaqSection client:visible />
+      </main>
+
+      <Footer client:visible />
+    </div>
+  </div>
+</Layout>
