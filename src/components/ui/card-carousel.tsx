@@ -38,12 +38,21 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({
   .swiper-slide {
     background-position: center;
     background-size: cover;
-    width: 280px;
+    width: 260px;
+    max-width: 82vw;
+  }
+
+  @media (min-width: 480px) {
+    .swiper-slide {
+      width: 300px;
+      max-width: 88vw;
+    }
   }
 
   @media (min-width: 640px) {
     .swiper-slide {
       width: 340px;
+      max-width: none;
     }
   }
 

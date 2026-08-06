@@ -21,12 +21,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ playBeep }) => {
 
           {/* Acid Lime Tape Label - EST. 2020 */}
           <div
-            className="absolute bottom-6 md:bottom-8 left-[-2%] sm:left-[2%] z-20 cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95"
+            className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8 z-20 cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95"
             style={{ transform: 'rotate(-5deg)' }}
             onClick={() => playBeep(800)}
             id="tape-label-est2020"
           >
-            <div className="bg-[#D4FF00] text-black font-syne font-extrabold text-xl sm:text-3xl md:text-4xl tracking-widest px-4 sm:px-7 py-2 md:py-2.5 border-2 border-black shadow-[4px_4px_0px_#000000] uppercase whitespace-nowrap">
+            <div className="bg-[#C6FF00] text-black font-syne font-extrabold text-lg sm:text-2xl md:text-3xl tracking-widest px-4 sm:px-6 py-1.5 md:py-2 border-2 border-black shadow-[4px_4px_0px_#000000] uppercase whitespace-nowrap">
               EST. 2020
             </div>
           </div>
@@ -41,8 +41,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ playBeep }) => {
                 I BUILD
               </h2>
               
-              <div className="inline-block px-2.5 sm:px-3 py-0.5 my-0.5 bg-white/5 border border-white/20 max-w-full overflow-hidden">
-                <span className="font-syne font-black text-base sm:text-2xl md:text-3xl lg:text-4xl leading-[0.9] text-zinc-400 tracking-tight whitespace-nowrap">
+              <div className="inline-block py-0.5 my-0.5 bg-white/5 max-w-full overflow-hidden">
+                <span className="font-syne font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-[0.9] text-zinc-300 tracking-tight whitespace-nowrap">
                   THE INTERNET&apos;S
                 </span>
               </div>

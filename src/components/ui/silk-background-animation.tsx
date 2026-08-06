@@ -41,7 +41,24 @@ export const Component = ({ isBackgroundOnly = false }: { isBackgroundOnly?: boo
       return (rx * ry * (1 + x)) % 1;
     };
 
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animationRef.current) {
+          animate();
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(canvas);
+
     const animate = () => {
+      if (!isVisible) {
+        animationRef.current = 0;
+        return;
+      }
+
       const { width, height } = canvas;
       if (width === 0 || height === 0) return;
 
@@ -131,6 +148,7 @@ export const Component = ({ isBackgroundOnly = false }: { isBackgroundOnly?: boo
     animate();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -142,7 +160,7 @@ export const Component = ({ isBackgroundOnly = false }: { isBackgroundOnly?: boo
     return (
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-40 mix-blend-screen"
+        className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-40 mix-blend-screen"
         style={{ objectFit: 'cover' }}
       />
     );

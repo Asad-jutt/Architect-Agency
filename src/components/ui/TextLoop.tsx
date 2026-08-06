@@ -100,7 +100,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   const headRef = useRef<SVGTextPathElement>(null);
   const tailRef = useRef<SVGTextPathElement>(null);
 
-  const [metrics, setMetrics] = useState({ length: 0, reps: 1 });
+  const [metrics, setMetrics] = useState({ length: 0, unitWidth: 0, reps: 3 });
 
   const rawId = useId();
   const pathId = `text-loop-${rawId.replace(/:/g, '')}`;
@@ -117,7 +117,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   }, [text, logos, separator, uppercase]);
 
   const textStyle = useMemo(
-    () => ({ fontSize: `${fontSize}px`, fontWeight, letterSpacing: `${letterSpacing}px`, fontFamily: 'Syne, monospace' }),
+    () => ({ fontSize: `${fontSize}px`, fontWeight, letterSpacing: `${letterSpacing}px`, fontFamily: 'Syne, sans-serif' }),
     [fontSize, fontWeight, letterSpacing]
   );
 
@@ -138,10 +138,10 @@ export const TextLoop: React.FC<TextLoopProps> = ({
       } catch {
         return;
       }
-      if (!length) return;
+      if (!length || !unitWidth) return;
 
-      const reps = unitWidth > 0 ? Math.max(1, Math.round(length / unitWidth) + 1) : 1;
-      setMetrics(prev => (prev.length === length && prev.reps === reps ? prev : { length, reps }));
+      const reps = Math.max(3, Math.ceil((length + unitWidth * 2) / unitWidth));
+      setMetrics(prev => (prev.length === length && prev.unitWidth === unitWidth && prev.reps === reps ? prev : { length, unitWidth, reps }));
     };
 
     measure();
@@ -155,15 +155,12 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   }, [d, unit, fontSize, fontWeight, letterSpacing]);
 
   useEffect(() => {
-    const { length } = metrics;
+    const { unitWidth } = metrics;
     const head = headRef.current;
-    const tail = tailRef.current;
-    if (!head || !tail || !length) return undefined;
+    if (!head || !unitWidth) return undefined;
 
     const apply = (offset: number) => {
-      const partner = offset >= 0 ? offset - length : offset + length;
-      head.setAttribute('startOffset', String(offset));
-      tail.setAttribute('startOffset', String(partner));
+      head.setAttribute('startOffset', `${offset}px`);
     };
 
     apply(0);
@@ -174,8 +171,8 @@ export const TextLoop: React.FC<TextLoopProps> = ({
 
     const state = { offset: 0 };
     const tween = gsap.to(state, {
-      offset: direction === 'reverse' ? -length : length,
-      duration: length / speed,
+      offset: direction === 'reverse' ? unitWidth : -unitWidth,
+      duration: unitWidth / speed,
       ease: 'none',
       repeat: -1,
       onUpdate: () => apply(state.offset)
@@ -200,7 +197,6 @@ export const TextLoop: React.FC<TextLoopProps> = ({
   }, [metrics, speed, direction, pauseOnHover]);
 
   const loopText = unit.repeat(metrics.reps);
-  const fitLength = metrics.length || undefined;
 
   return (
     <div ref={rootRef} className={`text-loop ${className}`.trim()} style={style}>
@@ -209,7 +205,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         preserveAspectRatio="xMidYMid meet"
         role="img"
-        aria-label="Logo Loop"
+        aria-label="Text Loop"
       >
         <path
           ref={pathRef}
@@ -227,13 +223,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
         </text>
 
         <text className="text-loop-text" style={textStyle} fill={color} dominantBaseline="central" aria-hidden="true">
-          <textPath ref={headRef} href={`#${pathId}`} startOffset={0} textLength={fitLength} lengthAdjust="spacing">
-            {loopText}
-          </textPath>
-        </text>
-
-        <text className="text-loop-text" style={textStyle} fill={color} dominantBaseline="central" aria-hidden="true">
-          <textPath ref={tailRef} href={`#${pathId}`} startOffset={0} textLength={fitLength} lengthAdjust="spacing">
+          <textPath ref={headRef} href={`#${pathId}`} startOffset="0px">
             {loopText}
           </textPath>
         </text>

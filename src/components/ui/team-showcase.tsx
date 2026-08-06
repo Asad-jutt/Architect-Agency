@@ -82,14 +82,14 @@ export default function TeamShowcase({ members = DEFAULT_MEMBERS, playBeep }: Te
   return (
     <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-10 lg:gap-14 select-none w-full max-w-5xl mx-auto py-4 px-2 font-mono-code">
       {/* ── Left: photo grid ── */}
-      <div className="flex gap-3 md:gap-4 flex-shrink-0 overflow-x-auto pb-2 md:pb-0 max-w-full justify-center">
+      <div className="flex gap-2 sm:gap-3 md:gap-4 flex-shrink-0 max-w-full justify-center mx-auto">
         {/* Column 1 */}
-        <div className="flex flex-col gap-3 md:gap-4">
+        <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
           {col1.map((member) => (
             <PhotoCard
               key={member.id}
               member={member}
-              className="w-[110px] h-[120px] sm:w-[130px] sm:h-[140px] md:w-[155px] md:h-[165px]"
+              className="w-[85px] h-[95px] xs:w-[98px] xs:h-[108px] sm:w-[130px] sm:h-[140px] md:w-[155px] md:h-[165px]"
               hoveredId={hoveredId}
               onHover={handleHover}
             />
@@ -97,12 +97,12 @@ export default function TeamShowcase({ members = DEFAULT_MEMBERS, playBeep }: Te
         </div>
 
         {/* Column 2 */}
-        <div className="flex flex-col gap-3 md:gap-4 mt-[40px] sm:mt-[48px] md:mt-[56px]">
+        <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 mt-[28px] sm:mt-[48px] md:mt-[56px]">
           {col2.map((member) => (
             <PhotoCard
               key={member.id}
               member={member}
-              className="w-[122px] h-[132px] sm:w-[145px] sm:h-[155px] md:w-[172px] md:h-[182px]"
+              className="w-[94px] h-[104px] xs:w-[108px] xs:h-[118px] sm:w-[145px] sm:h-[155px] md:w-[172px] md:h-[182px]"
               hoveredId={hoveredId}
               onHover={handleHover}
             />
@@ -110,12 +110,12 @@ export default function TeamShowcase({ members = DEFAULT_MEMBERS, playBeep }: Te
         </div>
 
         {/* Column 3 */}
-        <div className="flex flex-col gap-3 md:gap-4 mt-[18px] sm:mt-[22px] md:mt-[28px]">
+        <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 mt-[14px] sm:mt-[22px] md:mt-[28px]">
           {col3.map((member) => (
             <PhotoCard
               key={member.id}
               member={member}
-              className="w-[115px] h-[125px] sm:w-[136px] sm:h-[146px] md:w-[162px] md:h-[172px]"
+              className="w-[88px] h-[98px] xs:w-[102px] xs:h-[112px] sm:w-[136px] sm:h-[146px] md:w-[162px] md:h-[172px]"
               hoveredId={hoveredId}
               onHover={handleHover}
             />
