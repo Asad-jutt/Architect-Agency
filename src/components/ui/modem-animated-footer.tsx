@@ -91,7 +91,7 @@ export const Footer: React.FC<FooterProps> = ({
 
   return (
     <section className={`relative w-full overflow-hidden bg-black text-white select-none ${className}`}>
-      <footer className="border-t border-white/10 bg-black relative">
+      <footer className="border-t border-white/10 bg-black relative overflow-x-hidden">
         {/* Subtle Background Cyber Grid */}
         <div 
           className="absolute inset-0 pointer-events-none opacity-[0.03]"
@@ -134,7 +134,7 @@ export const Footer: React.FC<FooterProps> = ({
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group p-2.5 sm:p-3 bg-[#12130F] border border-white/10 hover:border-[#C6FF00] rounded-lg text-zinc-400 hover:text-[#C6FF00] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(198,255,0,0.2)]"
+                      className="group p-3 sm:p-3 bg-[#12130F] border border-white/10 hover:border-[#C6FF00] rounded-lg text-zinc-400 hover:text-[#C6FF00] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(198,255,0,0.2)]"
                       aria-label={link.label}
                     >
                       <div className="w-5 h-5 transition-transform duration-300 group-hover:scale-110">

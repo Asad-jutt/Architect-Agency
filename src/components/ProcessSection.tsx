@@ -170,7 +170,7 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ playBeep }) => {
           <a
             href="#section-about"
             onClick={() => playBeep(900)}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#C6FF00] text-black font-bold text-xs uppercase hover:bg-white transition-colors cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#C6FF00] text-black font-bold text-xs uppercase hover:bg-white transition-colors cursor-pointer min-h-[44px]"
           >
             <span>START A PROJECT</span>
             <ArrowRight className="w-4 h-4" />

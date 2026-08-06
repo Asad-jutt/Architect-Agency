@@ -166,7 +166,7 @@ export const NeuralNetModal: React.FC<NeuralNetModalProps> = ({
               playBeep(300);
               onClose();
             }}
-            className="p-1 hover:bg-black hover:text-[#D4FF00] transition-colors border border-black font-bold text-xs"
+            className="p-2.5 hover:bg-black hover:text-[#D4FF00] transition-colors border border-black font-bold text-xs"
             id="btn-close-neural-modal"
           >
             <X className="w-4 h-4" />

@@ -50,7 +50,7 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({
               playBeep(300);
               onClose();
             }}
-            className="p-1 hover:bg-black hover:text-[#D4FF00] transition-colors border border-black font-bold text-xs"
+            className="p-2.5 hover:bg-black hover:text-[#D4FF00] transition-colors border border-black font-bold text-xs"
             id="btn-close-status-modal"
           >
             <X className="w-4 h-4" />
@@ -119,14 +119,14 @@ export const SystemStatusModal: React.FC<SystemStatusModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-white/5 border-t border-white/20 flex justify-between items-center text-xs">
+        <div className="p-4 bg-white/5 border-t border-white/20 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between text-xs">
           <span className="text-white/50">HOST: CLOUD_RUN // REGION: ASIA-SE</span>
           <button
             onClick={() => {
               playBeep(400);
               onClose();
             }}
-            className="px-4 py-2 bg-[#D4FF00] text-black font-bold uppercase hover:bg-white transition-colors"
+            className="w-full sm:w-auto px-4 py-2.5 bg-[#D4FF00] text-black font-bold uppercase hover:bg-white transition-colors min-h-[44px]"
           >
             DISMISS
           </button>

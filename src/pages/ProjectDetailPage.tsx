@@ -21,6 +21,7 @@ interface ProjectDetailPageProps {
   onNavigateBack: () => void;
   onSelectProject: (id: string) => void;
   playBeep?: (freq?: number) => void;
+  projects?: ProjectData[];
 }
 
 export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
@@ -28,16 +29,18 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
   onNavigateBack,
   onSelectProject,
   playBeep,
+  projects,
 }) => {
-  const project = PROJECTS_LIST.find((p) => p.id === projectId) || PROJECTS_LIST[0];
+  const projectList = projects && projects.length > 0 ? projects : PROJECTS_LIST;
+  const project = projectList.find((p) => p.id === projectId) || projectList[0];
   const [selectedImage, setSelectedImage] = useState<string>(project.imageUrl);
   const [activeTab, setActiveTab] = useState<'overview' | 'challenge' | 'specs' | 'gallery'>('overview');
   const [isZoomed, setIsZoomed] = useState(false);
 
   // Find index for Prev/Next navigation
-  const currentIndex = PROJECTS_LIST.findIndex((p) => p.id === project.id);
-  const prevProject = PROJECTS_LIST[(currentIndex - 1 + PROJECTS_LIST.length) % PROJECTS_LIST.length];
-  const nextProject = PROJECTS_LIST[(currentIndex + 1) % PROJECTS_LIST.length];
+  const currentIndex = projectList.findIndex((p) => p.id === project.id);
+  const prevProject = projectList[(currentIndex - 1 + projectList.length) % projectList.length];
+  const nextProject = projectList[(currentIndex + 1) % projectList.length];
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -160,7 +163,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
                   : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'
               }`}
             >
-              <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
+              <img src={img} alt={`Gallery ${idx + 1}`} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           ))}
         </div>
@@ -172,7 +175,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
               triggerBeep(650);
               setActiveTab('overview');
             }}
-            className={`px-5 py-3.5 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-wider transition-colors border-r border-white/10 whitespace-nowrap cursor-pointer ${
+            className={`px-5 py-4 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-wider transition-colors border-r border-white/10 whitespace-nowrap cursor-pointer min-h-[48px] ${
               activeTab === 'overview'
                 ? 'bg-[#C6FF00] text-black font-extrabold'
                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
@@ -187,7 +190,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
               triggerBeep(650);
               setActiveTab('challenge');
             }}
-            className={`px-5 py-3.5 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-wider transition-colors border-r border-white/10 whitespace-nowrap cursor-pointer ${
+            className={`px-5 py-4 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-wider transition-colors border-r border-white/10 whitespace-nowrap cursor-pointer min-h-[48px] ${
               activeTab === 'challenge'
                 ? 'bg-[#C6FF00] text-black font-extrabold'
                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
@@ -202,7 +205,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
               triggerBeep(650);
               setActiveTab('specs');
             }}
-            className={`px-5 py-3.5 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-wider transition-colors border-r border-white/10 whitespace-nowrap cursor-pointer ${
+            className={`px-5 py-4 flex items-center gap-2 text-xs sm:text-sm font-bold tracking-wider transition-colors border-r border-white/10 whitespace-nowrap cursor-pointer min-h-[48px] ${
               activeTab === 'specs'
                 ? 'bg-[#C6FF00] text-black font-extrabold'
                 : 'text-zinc-400 hover:text-white hover:bg-white/5'

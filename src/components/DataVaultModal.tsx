@@ -107,7 +107,7 @@ export const DataVaultModal: React.FC<DataVaultModalProps> = ({
               playBeep(300);
               onClose();
             }}
-            className="p-1 hover:bg-black hover:text-white transition-colors border border-black font-bold text-xs"
+            className="p-2.5 hover:bg-black hover:text-white transition-colors border border-black font-bold text-xs"
             id="btn-close-vault-modal"
           >
             <X className="w-4 h-4" />

@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { LogoStripSection } from './components/LogoStripSection';
-import { ProjectCardsSection } from './components/ProjectCardsSection';
-import { ProcessSection } from './components/ProcessSection';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { TeamSection } from './components/TeamSection';
 import { AboutSection } from './components/AboutSection';
 import { FaqSection } from './components/ui/habit-faq-scroller';
-import { Footer } from './components/ui/modem-animated-footer';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
 import { WorksPage } from './pages/WorksPage';
 import { playBeep as triggerBeep } from './utils/audio';
 import { useGsapLenis } from './hooks/useGsapLenis';
+import { useProjects } from './hooks/useSanityData';
+import { LazySection } from './components/LazySection';
+
+const ProjectCardsSection = lazy(() =>
+  import('./components/ProjectCardsSection').then((m) => ({ default: m.ProjectCardsSection }))
+);
+
+const ProcessSection = lazy(() =>
+  import('./components/ProcessSection').then((m) => ({ default: m.ProcessSection }))
+);
+
+const Footer = lazy(() =>
+  import('./components/ui/modem-animated-footer').then((m) => ({ default: m.Footer }))
+);
 
 export default function App() {
   useGsapLenis();
@@ -24,6 +35,8 @@ export default function App() {
   const playBeep = (freq?: number) => {
     triggerBeep(freq, 0.05, soundEnabled);
   };
+
+  const { projects } = useProjects();
 
   const handleSelectProject = (projectId: string) => {
     setSelectedProjectId(projectId);
@@ -68,12 +81,21 @@ export default function App() {
             <>
               <HeroSection playBeep={playBeep} />
               <LogoStripSection playBeep={playBeep} />
-              <ProjectCardsSection
-                playBeep={playBeep}
-                onSelectProject={handleSelectProject}
-                onOpenWorksPage={handleOpenWorksPage}
-              />
-              <ProcessSection playBeep={playBeep} />
+              <LazySection>
+                <Suspense>
+                  <ProjectCardsSection
+                    playBeep={playBeep}
+                    onSelectProject={handleSelectProject}
+                    onOpenWorksPage={handleOpenWorksPage}
+                    projects={projects}
+                  />
+                </Suspense>
+              </LazySection>
+              <LazySection>
+                <Suspense>
+                  <ProcessSection playBeep={playBeep} />
+                </Suspense>
+              </LazySection>
               <TestimonialsSection playBeep={playBeep} />
               <AboutSection playBeep={playBeep} />
               <TeamSection playBeep={playBeep} />
@@ -86,6 +108,7 @@ export default function App() {
               onSelectProject={handleSelectProject}
               onNavigateHome={handleNavigateHome}
               playBeep={playBeep}
+              projects={projects}
             />
           )}
 
@@ -95,11 +118,14 @@ export default function App() {
               onNavigateBack={() => setCurrentView('works')}
               onSelectProject={handleSelectProject}
               playBeep={playBeep}
+              projects={projects}
             />
           )}
 
           {/* Animated Modem Footer */}
-          <Footer />
+          <Suspense>
+            <Footer />
+          </Suspense>
         </main>
       </div>
     </div>

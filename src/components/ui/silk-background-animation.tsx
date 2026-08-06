@@ -42,6 +42,10 @@ export const Component = ({ isBackgroundOnly = false }: { isBackgroundOnly?: boo
     };
 
     let isVisible = true;
+    let prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -53,8 +57,20 @@ export const Component = ({ isBackgroundOnly = false }: { isBackgroundOnly?: boo
     );
     observer.observe(canvas);
 
+    const handleVisibility = () => {
+      if (document.hidden) {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = 0;
+        }
+      } else if (isVisible && !prefersReducedMotion) {
+        animate();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
     const animate = () => {
-      if (!isVisible) {
+      if (!isVisible || document.hidden || prefersReducedMotion) {
         animationRef.current = 0;
         return;
       }
@@ -150,6 +166,7 @@ export const Component = ({ isBackgroundOnly = false }: { isBackgroundOnly?: boo
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('visibilitychange', handleVisibility);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }

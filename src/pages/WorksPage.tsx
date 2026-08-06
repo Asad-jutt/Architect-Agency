@@ -6,12 +6,14 @@ interface WorksPageProps {
   onSelectProject: (id: string) => void;
   onNavigateHome: () => void;
   playBeep?: (freq?: number) => void;
+  projects?: ProjectData[];
 }
 
 export const WorksPage: React.FC<WorksPageProps> = ({
   onSelectProject,
   onNavigateHome,
   playBeep,
+  projects,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -22,7 +24,9 @@ export const WorksPage: React.FC<WorksPageProps> = ({
 
   const categories = ['ALL', 'WEBFLOW', 'EXPERIMENTAL', 'COMMERCIAL', 'RESEARCH'];
 
-  const filteredProjects = PROJECTS_LIST.filter((project) => {
+  const projectsList = projects && projects.length > 0 ? projects : PROJECTS_LIST;
+
+  const filteredProjects = projectsList.filter((project) => {
     const matchesCategory = selectedCategory === 'ALL' || project.category === selectedCategory;
     const matchesSearch =
       project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -123,6 +127,8 @@ export const WorksPage: React.FC<WorksPageProps> = ({
                 <img
                   src={project.imageUrl}
                   alt={project.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover filter grayscale contrast-125 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-500 ease-out"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />

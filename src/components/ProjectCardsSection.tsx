@@ -7,13 +7,17 @@ interface ProjectCardsSectionProps {
   playBeep: (freq?: number) => void;
   onSelectProject: (id: string) => void;
   onOpenWorksPage: () => void;
+  projects?: ProjectData[];
 }
 
 export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
   playBeep,
   onSelectProject,
   onOpenWorksPage,
+  projects,
 }) => {
+  const cards = projects && projects.length > 0 ? projects : PROJECTS_LIST;
+
   return (
     <section className="w-full min-h-screen flex flex-col justify-center bg-black text-white border-t border-b border-white/10 relative py-6 sm:py-8 md:py-10 select-none overflow-hidden" id="section-project-cards">
       {/* Header bar with controls */}
@@ -30,7 +34,7 @@ export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
             playBeep(800);
             onOpenWorksPage();
           }}
-          className="group flex items-center gap-2 text-xs font-bold text-[#C6FF00] hover:text-white transition-colors cursor-pointer border border-[#C6FF00]/40 hover:border-[#C6FF00] px-3 py-1.5 bg-[#12130F]"
+          className="group flex items-center gap-2 text-xs font-bold text-[#C6FF00] hover:text-white transition-colors cursor-pointer border border-[#C6FF00]/40 hover:border-[#C6FF00] px-3.5 py-2 bg-[#12130F] min-h-[44px]"
           id="btn-[#1]"
         >
           <span>VIEW_ALL_WORKS_DIRECTORY</span>
@@ -41,7 +45,7 @@ export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
       {/* Card Carousel Track Container */}
       <div className="w-full relative px-2 sm:px-4">
         <CardCarousel autoplayDelay={3500} showPagination={true} showNavigation={true}>
-          {PROJECTS_LIST.map((card) => (
+          {cards.map((card) => (
             <div
               key={card.id}
               onClick={() => {
@@ -109,7 +113,7 @@ export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
                       playBeep(850);
                       onSelectProject(card.id);
                     }}
-                    className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-full bg-[#C6FF00] text-black flex items-center justify-center transition-transform duration-300 hover:scale-110 active:scale-95 cursor-pointer brutalist-shadow-black hover:rotate-12 shrink-0"
+                    className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full bg-[#C6FF00] text-black flex items-center justify-center transition-transform duration-300 hover:scale-110 active:scale-95 cursor-pointer brutalist-shadow-black hover:rotate-12 shrink-0"
                     title={`View ${card.title} Case Study`}
                     id={`btn-open-${card.id}`}
                   >
@@ -132,7 +136,7 @@ export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
           className="group px-8 py-4 bg-[#C6FF00] text-black font-syne font-extrabold text-sm uppercase tracking-wider hover:bg-white transition-all cursor-pointer shadow-[0_0_20px_rgba(198,255,0,0.3)] hover:scale-105 active:scale-95 flex items-center gap-3"
           id="btn-all-works-cta"
         >
-          <span>EXPLORE ALL PROJECTS ({PROJECTS_LIST.length})</span>
+          <span>EXPLORE ALL PROJECTS ({cards.length})</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform stroke-[3]" />
         </button>
       </div>

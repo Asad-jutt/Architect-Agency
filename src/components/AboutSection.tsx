@@ -15,6 +15,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ playBeep }) => {
           <img
             src="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop"
             alt="Brutalist Visual Anchor"
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 opacity-80 group-hover:scale-105 transition-transform duration-700 ease-out"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

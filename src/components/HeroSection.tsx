@@ -29,9 +29,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section 
-      className="w-full max-w-[1280px] mx-auto relative overflow-hidden flex flex-col justify-between min-h-[calc(100vh-80px)]"
+      className="w-full max-w-[1280px] mx-auto relative overflow-hidden flex flex-col justify-between min-h-[calc(100vh-80px)] xl:pt-30 xl:pb-20"
       style={{
-        paddingTop: 'clamp(1rem, 3vh, 2.5rem)',
+        paddingTop: 'clamp(2.5rem, 6vh, 5rem)',
         paddingBottom: 'clamp(2rem, 6vh, 5rem)',
         paddingLeft: 'clamp(1rem, 4vw, 2.25rem)',
         paddingRight: 'clamp(1rem, 4vw, 2.25rem)'
@@ -75,9 +75,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Heading 1: ARCHITECT */}
         <div className="w-full leading-none pt-2 sm:pt-4 flex justify-center items-center">
           <h1
-            className="font-syne font-black uppercase text-white tracking-[-0.03em] sm:tracking-[-0.05em] leading-[0.85] select-none text-center max-w-full drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]"
+            className="font-syne font-black uppercase text-white tracking-[-0.03em] sm:tracking-[-0.05em] select-none text-center max-w-full drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)] text-5xl"
             style={{
-              fontSize: 'clamp(2.5rem, 13.5vw, 11rem)',
+              fontSize: 'clamp(2rem, 9vw, 8rem)',
             }}
             id="heading-architect"
           >
@@ -111,12 +111,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* CTA and Details (Asymmetrical Grid) */}
       <div 
-        className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end relative z-30"
+        className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end relative z-30 md:flex md:flex-row md:items-end md:justify-between"
         style={{ paddingTop: 'clamp(1.5rem, 4vh, 2.5rem)' }}
       >
         {/* Left Column: Bio & Magnetic Acid Green CTA */}
         <div 
-          className="lg:col-span-7 flex flex-col relative z-30"
+          className="lg:col-span-7 flex flex-col relative z-30 md:flex-1"
           style={{ gap: 'clamp(1rem, 2.5vh, 2rem)' }}
         >
           {/* Vertical Border Container */}
@@ -143,10 +143,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               onMouseEnter={() => {
                 playBeep(600);
               }}
-              className="w-full sm:w-auto relative group inline-flex items-center justify-between sm:justify-start gap-4 sm:gap-6 bg-[#C6FF00] hover:bg-white text-black font-syne font-black tracking-wider uppercase transition-all duration-300 cursor-pointer shadow-[0_0_30px_rgba(198,255,0,0.5)] hover:shadow-[0_0_40px_rgba(255,255,255,0.7)] hover:-translate-y-1 active:translate-y-0 rounded-none border-2 border-black overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#C6FF00] focus:ring-offset-2 focus:ring-offset-black touch-manipulation"
+              className="w-full sm:w-auto relative group inline-flex items-center justify-between sm:justify-start gap-4 sm:gap-6 bg-[#C6FF00] hover:bg-white text-black font-syne font-black tracking-wider uppercase transition-all duration-300 cursor-pointer shadow-[0_0_30px_rgba(198,255,0,0.5)] hover:shadow-[0_0_40px_rgba(255,255,255,0.7)] hover:-translate-y-1 active:translate-y-0 rounded-none border-2 border-black overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#C6FF00] focus:ring-offset-2 focus:ring-offset-black touch-manipulation md:mr-0 md:pr-5 md:pl-2 md:pt-2 md:pb-2"
               style={{
-                padding: 'clamp(0.875rem, 2vh, 1.125rem) clamp(1.25rem, 3vw, 1.75rem)',
-                minHeight: '48px'
+                padding: 'clamp(0.5rem, 1.2vh, 0.75rem) clamp(1rem, 2.5vw, 1.75rem)',
+                minHeight: '44px'
               }}
               id="btn-initialize-system"
             >
@@ -154,11 +154,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-[300%] transition-transform duration-1000 ease-in-out pointer-events-none" />
 
               {/* Left Badge Indicator */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="w-2.5 h-2.5 rounded-full bg-black animate-pulse" />
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className="w-2 h-2 rounded-full bg-black animate-pulse" />
                 <span 
                   className="font-mono-code font-bold text-black/80 tracking-widest"
-                  style={{ fontSize: 'clamp(0.65rem, 1.2vw, 0.75rem)' }}
+                  style={{ fontSize: 'clamp(0.55rem, 1vw, 0.6875rem)' }}
                 >
                   [01]
                 </span>
@@ -167,14 +167,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {/* Main Button Text */}
               <span 
                 className="font-extrabold tracking-widest text-black whitespace-nowrap"
-                style={{ fontSize: 'clamp(0.8125rem, 1.5vw, 0.9375rem)' }}
+                style={{ fontSize: 'clamp(0.6875rem, 1.15vw, 0.8125rem)' }}
               >
                 EXPLORE_PROJECTS
               </span>
 
               {/* Right Arrow Pill Badge */}
-              <div className="w-8 h-8 rounded-full bg-black text-[#C6FF00] group-hover:bg-black group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-45 shrink-0">
-                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+              <div className="w-6 h-6 rounded-full bg-black text-[#C6FF00] group-hover:bg-black group-hover:text-white flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-45 shrink-0">
+                <ArrowRight className="w-3 h-3 stroke-[2.5]" />
               </div>
             </button>
           </div>
@@ -182,7 +182,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Right Column: Secondary Minimalist Tech Sidebar */}
         <div 
-          className="lg:col-span-5 flex flex-col items-start lg:items-end font-mono-code text-left lg:text-right pt-4 lg:pt-0 border-t border-white/10 lg:border-t-0"
+          className="lg:col-span-5 flex flex-col items-start lg:items-end font-mono-code text-left lg:text-right pt-4 lg:pt-0 border-t border-white/10 lg:border-t-0 md:flex-none"
           style={{ gap: 'clamp(0.5rem, 1.5vh, 0.875rem)' }}
         >
           {/* Global Status Container */}

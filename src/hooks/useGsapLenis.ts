@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -6,7 +6,7 @@ import Lenis from 'lenis';
 gsap.registerPlugin(ScrollTrigger);
 
 export function useGsapLenis() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     // 1. Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
       duration: 1.2,
@@ -32,13 +32,13 @@ export function useGsapLenis() {
       const heroTl = gsap.timeline({ 
         defaults: { ease: 'power3.out', duration: 0.6 },
         onComplete: () => {
-          gsap.set(['#btn-initialize-system', '#heading-architect', '#sticker-release', '#sticker-dna'], { clearProps: 'all' });
+          gsap.set(['#btn-initialize-system', '#heading-architect', '#sticker-release', '#sticker-dna'], { clearProps: 'opacity' });
         }
       });
 
       heroTl
         .from('header', { y: -30, opacity: 0, duration: 0.5 })
-        .from('#heading-architect', { y: 30, opacity: 0, duration: 0.6 }, '-=0.2')
+        .from('#heading-architect', { y: 24, opacity: 0, scale: 0.96, duration: 0.7, ease: 'power3.out' }, '-=0.2')
         .from('#sticker-release', { scale: 0, rotation: -12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
         .from('#sticker-dna', { scale: 0, rotation: 12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
         .from('#btn-initialize-system', { y: 20, opacity: 0 }, '-=0.3')
@@ -151,7 +151,17 @@ export function useGsapLenis() {
       });
     });
 
+    // Lazy-loaded sections mount after the initial context is created.
+    // Recalculate all trigger positions whenever a lazy section appears.
+    const handleSectionMounted = () => ScrollTrigger.refresh();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('architect:section-mounted', handleSectionMounted);
+    }
+
     return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('architect:section-mounted', handleSectionMounted);
+      }
       ctx.revert();
       lenis.destroy();
       gsap.ticker.remove(updateTicker);
