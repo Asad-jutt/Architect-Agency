@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, ChevronRight, Terminal, RefreshCw } from 'lucide-react';
-import { Component as SilkBackground } from './ui/silk-background-animation';
+import { ArrowRight } from 'lucide-react';
 import { requestSectionScroll } from '../utils/scroll';
 
 interface HeroSectionProps {
@@ -27,7 +26,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section 
-      className="w-full max-w-[1280px] mx-auto relative overflow-hidden flex flex-col justify-between min-h-[calc(100vh-80px)] xl:pt-30 xl:pb-20"
+      className="w-full max-w-[1280px] mx-auto relative overflow-hidden flex flex-col justify-between min-h-hero xl:pt-30 xl:pb-20"
       style={{
         paddingTop: 'clamp(2.5rem, 6vh, 5rem)',
         paddingBottom: 'clamp(2rem, 6vh, 5rem)',
@@ -35,8 +34,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         paddingRight: 'clamp(1rem, 4vw, 2.25rem)'
       }}
     >
-      {/* Silk Background ONLY for Hero Section */}
-      <SilkBackground isBackgroundOnly={true} />
+      {/* Silk Background (original canvas animation — started instantly at page load by an inline script in index.astro, no React hydration required) */}
+      <canvas
+        id="hero-silk-canvas"
+        className="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-40 mix-blend-screen"
+        style={{ objectFit: 'cover' }}
+        aria-hidden="true"
+      />
 
       {/* Top Headline Cluster */}
       <div 
@@ -121,6 +125,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div 
             className="border-l-2 border-[#D4FF00] py-1 max-w-xl"
             style={{ paddingLeft: 'clamp(0.875rem, 2.5vw, 1.75rem)' }}
+            id="hero-bio"
           >
             <p 
               className="font-geist font-normal text-[#E4E3DB] leading-[1.5]"
@@ -211,7 +216,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="w-full lg:w-[320px] h-[1px] bg-white/20 my-1" />
 
           {/* Latency Container */}
-          <div className="flex flex-col items-start lg:items-end py-1">
+          <div className="flex flex-col items-start lg:items-end py-1" id="latency-container">
             <span 
               className="tracking-[1.4px] uppercase text-white/40"
               style={{ fontSize: 'clamp(0.6875rem, 1.2vw, 0.75rem)' }}

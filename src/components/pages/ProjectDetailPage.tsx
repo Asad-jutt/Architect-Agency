@@ -119,6 +119,9 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
           <img
             src={selectedImage}
             alt={project.title}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             className={`w-full h-full object-cover transition-transform duration-500 ${
               isZoomed ? 'scale-125' : 'scale-100'
             }`}
@@ -147,7 +150,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         </div>
 
         {/* Gallery Thumbnails Strip */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {project.galleryImages.map((img, idx) => (
             <div
               key={idx}
@@ -167,7 +170,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         </div>
 
         {/* Tabs Bar */}
-        <div className="flex border-b border-white/20 overflow-x-auto scrollbar-none bg-[#12130F]">
+        <div className="flex border-b border-white/20 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden bg-[#12130F]">
           <button
             onClick={() => {
               triggerBeep(650);

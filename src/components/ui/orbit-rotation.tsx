@@ -59,7 +59,7 @@ export function OrbitRotation({
 
         {/* Generate Orbits */}
         {[...Array(orbitCount)].map((_, orbitIdx) => {
-          const orbitSize = `${8 + orbitGap * (orbitIdx + 1)}rem`
+          const orbitSize = `min(${8 + orbitGap * (orbitIdx + 1)}rem, ${56 + orbitIdx * 10}vw)`
           const angleStep = (2 * Math.PI) / iconsPerOrbit
           const animationDuration = `${12 + orbitIdx * 6}s`
 

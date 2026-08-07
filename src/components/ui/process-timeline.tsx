@@ -89,7 +89,7 @@ export const ContainerSticky = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("sticky top-5 w-full z-20 overflow-hidden", className)}
+    className={cn("sticky top-[100px] md:top-[60px] w-full z-20 overflow-hidden", className)}
     {...props}
   />
 ))

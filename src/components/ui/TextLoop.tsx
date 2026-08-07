@@ -182,6 +182,24 @@ export const TextLoop: React.FC<TextLoopProps> = ({
     const pause = () => tween.pause();
     const resume = () => tween.resume();
 
+    // Pause when off-screen so the infinite tween doesn't waste CPU.
+    let observer: IntersectionObserver | null = null;
+    if (root && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              resume();
+            } else {
+              pause();
+            }
+          });
+        },
+        { threshold: 0 }
+      );
+      observer.observe(root);
+    }
+
     if (pauseOnHover && root) {
       root.addEventListener('pointerenter', pause);
       root.addEventListener('pointerleave', resume);
@@ -189,6 +207,7 @@ export const TextLoop: React.FC<TextLoopProps> = ({
 
     return () => {
       tween.kill();
+      if (observer) observer.disconnect();
       if (pauseOnHover && root) {
         root.removeEventListener('pointerenter', pause);
         root.removeEventListener('pointerleave', resume);

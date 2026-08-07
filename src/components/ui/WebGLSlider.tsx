@@ -1,8 +1,20 @@
 import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import { Pane } from 'tweakpane';
-import gsap from 'gsap';
+import type { Texture } from 'three';
+import type {
+  OrthographicCamera,
+  Scene,
+  ShaderMaterial,
+  WebGLRenderer,
+} from 'three';
 import './webgl-slider.css';
+
+let threeModulePromise: Promise<typeof import('three')> | null = null;
+const getThree = () => {
+  if (!threeModulePromise) {
+    threeModulePromise = import('three');
+  }
+  return threeModulePromise;
+};
 
 export interface WebGLSliderSlide {
   id: string;
@@ -60,158 +72,6 @@ const SLIDER_CONFIG: any = {
     timeshiftChromatic: 1.5,
     timeshiftTurbulence: 1.4,
   },
-  effectPresets: {
-    glass: {
-      Subtle: {
-        glassRefractionStrength: 0.6,
-        glassChromaticAberration: 0.5,
-        glassBubbleClarity: 1.3,
-        glassEdgeGlow: 0.7,
-        glassLiquidFlow: 0.8,
-      },
-      Default: {
-        glassRefractionStrength: 1.0,
-        glassChromaticAberration: 1.0,
-        glassBubbleClarity: 1.0,
-        glassEdgeGlow: 1.0,
-        glassLiquidFlow: 1.0,
-      },
-      Crystal: {
-        glassRefractionStrength: 1.5,
-        glassChromaticAberration: 1.8,
-        glassBubbleClarity: 0.7,
-        glassEdgeGlow: 1.4,
-        glassLiquidFlow: 0.5,
-      },
-      Liquid: {
-        glassRefractionStrength: 0.8,
-        glassChromaticAberration: 0.4,
-        glassBubbleClarity: 1.2,
-        glassEdgeGlow: 0.8,
-        glassLiquidFlow: 1.8,
-      },
-    },
-    frost: {
-      Light: {
-        frostIntensity: 0.8,
-        frostCrystalSize: 1.3,
-        frostIceCoverage: 0.6,
-        frostTemperature: 0.7,
-        frostTexture: 0.8,
-      },
-      Default: {
-        frostIntensity: 1.5,
-        frostCrystalSize: 1.0,
-        frostIceCoverage: 1.0,
-        frostTemperature: 1.0,
-        frostTexture: 1.0,
-      },
-      Heavy: {
-        frostIntensity: 2.2,
-        frostCrystalSize: 0.7,
-        frostIceCoverage: 1.4,
-        frostTemperature: 1.5,
-        frostTexture: 1.3,
-      },
-      Arctic: {
-        frostIntensity: 2.8,
-        frostCrystalSize: 0.5,
-        frostIceCoverage: 1.8,
-        frostTemperature: 2.0,
-        frostTexture: 1.6,
-      },
-    },
-    ripple: {
-      Gentle: {
-        rippleFrequency: 15.0,
-        rippleAmplitude: 0.05,
-        rippleWaveSpeed: 0.7,
-        rippleRippleCount: 0.8,
-        rippleDecay: 1.2,
-      },
-      Default: {
-        rippleFrequency: 25.0,
-        rippleAmplitude: 0.08,
-        rippleWaveSpeed: 1.0,
-        rippleRippleCount: 1.0,
-        rippleDecay: 1.0,
-      },
-      Strong: {
-        rippleFrequency: 35.0,
-        rippleAmplitude: 0.12,
-        rippleWaveSpeed: 1.4,
-        rippleRippleCount: 1.3,
-        rippleDecay: 0.8,
-      },
-      Tsunami: {
-        rippleFrequency: 45.0,
-        rippleAmplitude: 0.18,
-        rippleWaveSpeed: 1.8,
-        rippleRippleCount: 1.6,
-        rippleDecay: 0.6,
-      },
-    },
-    plasma: {
-      Calm: {
-        plasmaIntensity: 0.8,
-        plasmaSpeed: 0.5,
-        plasmaEnergyIntensity: 0.2,
-        plasmaContrastBoost: 0.1,
-        plasmaTurbulence: 0.6,
-      },
-      Default: {
-        plasmaIntensity: 1.2,
-        plasmaSpeed: 0.8,
-        plasmaEnergyIntensity: 0.4,
-        plasmaContrastBoost: 0.3,
-        plasmaTurbulence: 1.0,
-      },
-      Storm: {
-        plasmaIntensity: 1.8,
-        plasmaSpeed: 1.3,
-        plasmaEnergyIntensity: 0.7,
-        plasmaContrastBoost: 0.5,
-        plasmaTurbulence: 1.5,
-      },
-      Nuclear: {
-        plasmaIntensity: 2.5,
-        plasmaSpeed: 1.8,
-        plasmaEnergyIntensity: 1.0,
-        plasmaContrastBoost: 0.8,
-        plasmaTurbulence: 2.0,
-      },
-    },
-    timeshift: {
-      Subtle: {
-        timeshiftDistortion: 0.5,
-        timeshiftBlur: 0.6,
-        timeshiftFlow: 0.5,
-        timeshiftChromatic: 0.4,
-        timeshiftTurbulence: 0.6,
-      },
-      Default: {
-        timeshiftDistortion: 1.6,
-        timeshiftBlur: 1.5,
-        timeshiftFlow: 1.4,
-        timeshiftChromatic: 1.5,
-        timeshiftTurbulence: 1.4,
-      },
-      Intense: {
-        timeshiftDistortion: 2.2,
-        timeshiftBlur: 2.0,
-        timeshiftFlow: 2.0,
-        timeshiftChromatic: 2.2,
-        timeshiftTurbulence: 2.0,
-      },
-      Dreamlike: {
-        timeshiftDistortion: 2.8,
-        timeshiftBlur: 2.5,
-        timeshiftFlow: 2.5,
-        timeshiftChromatic: 2.6,
-        timeshiftTurbulence: 2.5,
-      },
-    },
-  },
 };
 
 const vertexShader = `
@@ -222,7 +82,7 @@ const vertexShader = `
       }
     `;
 
-const fragmentShader = `
+const shaderPreamble = `
       uniform sampler2D uTexture1;
       uniform sampler2D uTexture2;
       uniform float uProgress;
@@ -304,7 +164,10 @@ const fragmentShader = `
         float x = sin(a) + cos(b) * 51.;
         return fract(x);
       }
+    `;
 
+const effectShaderBodies: Record<string, string> = {
+  glass: `
       vec4 glassEffect(vec2 uv, float progress) {
         float glassStrength = 0.08 * uGlassRefractionStrength * uDistortionStrength * uGlobalIntensity;
         float chromaticAberration = 0.02 * uGlassChromaticAberration * uGlobalIntensity;
@@ -402,7 +265,8 @@ const fragmentShader = `
         
         return mix(currentImg, newImg, inside);
       }
-
+    `,
+  frost: `
       vec4 frostEffect(vec2 uv, float progress) {
         vec4 currentImg = texture2D(uTexture1, getCoverUV(uv, uTexture1Size));
         vec4 newImg = texture2D(uTexture2, getCoverUV(uv, uTexture2Size));
@@ -467,7 +331,8 @@ const fragmentShader = `
         
         return mix(currentImg, finalFrost, overallBlend);
       }
-
+    `,
+  ripple: `
       vec4 rippleEffect(vec2 uv, float progress) {
         vec4 currentImg = texture2D(uTexture1, getCoverUV(uv, uTexture1Size));
         vec4 newImg = texture2D(uTexture2, getCoverUV(uv, uTexture2Size));
@@ -506,7 +371,8 @@ const fragmentShader = `
         float transition = smoothstep(0.0, 1.0, progress);
         return mix(currentImg, rippleResult, transition);
       }
-
+    `,
+  plasma: `
       vec4 plasmaEffect(vec2 uv, float progress) {
         vec4 currentImg = texture2D(uTexture1, getCoverUV(uv, uTexture1Size));
         vec4 newImg = texture2D(uTexture2, getCoverUV(uv, uTexture2Size));
@@ -593,7 +459,8 @@ const fragmentShader = `
         float overallTransition = smoothstep(0.0, 1.0, progress);
         return mix(currentImg, plasmaResult, overallTransition);
       }
-
+    `,
+  timeshift: `
       vec4 timeshiftEffect(vec2 uv, float progress) {
         vec2 uv1 = getCoverUV(uv, uTexture1Size);
         vec2 uv2_base = getCoverUV(uv, uTexture2Size);
@@ -705,21 +572,17 @@ const fragmentShader = `
         
         return mix(currentImg, finalColor, smoothstep(0.0, 1.0, progress));
       }
+    `,
+};
 
+const buildFragmentShader = (effectName: string) => {
+  const body = effectShaderBodies[effectName] || effectShaderBodies.glass;
+  return shaderPreamble + body + `
       void main() {
-        if (uEffectType == 0) {
-          gl_FragColor = glassEffect(vUv, uProgress);
-        } else if (uEffectType == 1) {
-          gl_FragColor = frostEffect(vUv, uProgress);
-        } else if (uEffectType == 2) {
-          gl_FragColor = rippleEffect(vUv, uProgress);
-        } else if (uEffectType == 3) {
-          gl_FragColor = plasmaEffect(vUv, uProgress);
-        } else {
-          gl_FragColor = timeshiftEffect(vUv, uProgress);
-        }
+        gl_FragColor = ${effectName}Effect(vUv, uProgress);
       }
     `;
+};
 
 const EFFECT_MAP: Record<string, number> = {
   glass: 0,
@@ -763,20 +626,18 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
     SLIDER_CONFIG.settings.currentEffect = 'glass';
     SLIDER_CONFIG.settings.currentEffectPreset = 'Default';
 
-    let renderer: THREE.WebGLRenderer;
-    let scene: THREE.Scene;
-    let camera: THREE.OrthographicCamera;
-    let shaderMaterial: THREE.ShaderMaterial;
-    const slideTextures: THREE.Texture[] = [];
+    let renderer: WebGLRenderer;
+    let scene: Scene;
+    let camera: OrthographicCamera;
+    let shaderMaterial: ShaderMaterial;
+    let gsap: any = null;
+    const slideTextures: Texture[] = [];
     let texturesLoaded = false;
     let sliderEnabled = false;
     let currentSlideIndex = 0;
     let isTransitioning = false;
     let autoSlideTimer: number | null = null;
     let progressAnimation: number | null = null;
-    let pane: Pane | null = null;
-    let isApplyingPreset = false;
-    const effectFolders: Record<string, any> = {};
 
     // On-demand rendering: only draw frames when something actually changes.
     let requestRender: (() => void) | null = null;
@@ -784,7 +645,8 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
 
     const getPixelRatio = () => {
       const dpr = window.devicePixelRatio || 1;
-      const cap = window.innerWidth < 768 ? 1.5 : 2;
+      // Lower caps on mobile to keep GPU load light on low-end devices.
+      const cap = window.innerWidth < 768 ? 1 : 1.5;
       return Math.min(dpr, cap);
     };
 
@@ -795,359 +657,6 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
     indexRef.current = 0;
 
     const el = (id: string) => container.querySelector<HTMLElement>(`#${id}`);
-
-    // ---------- Pane helpers ----------
-    const getPresetOptions = (effectName: string) => {
-      const presets = SLIDER_CONFIG.effectPresets[effectName];
-      if (presets) {
-        const options: Record<string, string> = {};
-        Object.keys(presets).forEach((key) => {
-          options[key] = key;
-        });
-        options['Custom'] = 'Custom';
-        return options;
-      }
-      return { Default: 'Default', Custom: 'Custom' };
-    };
-
-    const updateShaderUniforms = () => {
-      if (!shaderMaterial) return;
-      const uniforms = shaderMaterial.uniforms;
-      const s = SLIDER_CONFIG.settings;
-      if (uniforms.uGlobalIntensity) uniforms.uGlobalIntensity.value = s.globalIntensity;
-      if (uniforms.uSpeedMultiplier) uniforms.uSpeedMultiplier.value = s.speedMultiplier;
-      if (uniforms.uDistortionStrength) uniforms.uDistortionStrength.value = s.distortionStrength;
-      if (uniforms.uColorEnhancement) uniforms.uColorEnhancement.value = s.colorEnhancement;
-      if (uniforms.uGlassRefractionStrength) uniforms.uGlassRefractionStrength.value = s.glassRefractionStrength;
-      if (uniforms.uGlassChromaticAberration) uniforms.uGlassChromaticAberration.value = s.glassChromaticAberration;
-      if (uniforms.uGlassBubbleClarity) uniforms.uGlassBubbleClarity.value = s.glassBubbleClarity;
-      if (uniforms.uGlassEdgeGlow) uniforms.uGlassEdgeGlow.value = s.glassEdgeGlow;
-      if (uniforms.uGlassLiquidFlow) uniforms.uGlassLiquidFlow.value = s.glassLiquidFlow;
-      if (uniforms.uFrostIntensity) uniforms.uFrostIntensity.value = s.frostIntensity;
-      if (uniforms.uFrostCrystalSize) uniforms.uFrostCrystalSize.value = s.frostCrystalSize;
-      if (uniforms.uFrostIceCoverage) uniforms.uFrostIceCoverage.value = s.frostIceCoverage;
-      if (uniforms.uFrostTemperature) uniforms.uFrostTemperature.value = s.frostTemperature;
-      if (uniforms.uFrostTexture) uniforms.uFrostTexture.value = s.frostTexture;
-      if (uniforms.uRippleFrequency) uniforms.uRippleFrequency.value = s.rippleFrequency;
-      if (uniforms.uRippleAmplitude) uniforms.uRippleAmplitude.value = s.rippleAmplitude;
-      if (uniforms.uRippleWaveSpeed) uniforms.uRippleWaveSpeed.value = s.rippleWaveSpeed;
-      if (uniforms.uRippleRippleCount) uniforms.uRippleRippleCount.value = s.rippleRippleCount;
-      if (uniforms.uRippleDecay) uniforms.uRippleDecay.value = s.rippleDecay;
-      if (uniforms.uPlasmaIntensity) uniforms.uPlasmaIntensity.value = s.plasmaIntensity;
-      if (uniforms.uPlasmaSpeed) uniforms.uPlasmaSpeed.value = s.plasmaSpeed;
-      if (uniforms.uPlasmaEnergyIntensity) uniforms.uPlasmaEnergyIntensity.value = s.plasmaEnergyIntensity;
-      if (uniforms.uPlasmaContrastBoost) uniforms.uPlasmaContrastBoost.value = s.plasmaContrastBoost;
-      if (uniforms.uPlasmaTurbulence) uniforms.uPlasmaTurbulence.value = s.plasmaTurbulence;
-      if (uniforms.uTimeshiftDistortion) uniforms.uTimeshiftDistortion.value = s.timeshiftDistortion;
-      if (uniforms.uTimeshiftBlur) uniforms.uTimeshiftBlur.value = s.timeshiftBlur;
-      if (uniforms.uTimeshiftFlow) uniforms.uTimeshiftFlow.value = s.timeshiftFlow;
-      if (uniforms.uTimeshiftChromatic) uniforms.uTimeshiftChromatic.value = s.timeshiftChromatic;
-      if (uniforms.uTimeshiftTurbulence) uniforms.uTimeshiftTurbulence.value = s.timeshiftTurbulence;
-    };
-
-    const applyEffectPreset = (effectName: string, presetName: string) => {
-      const preset = SLIDER_CONFIG.effectPresets[effectName]?.[presetName];
-      if (!preset) return;
-      isApplyingPreset = true;
-      Object.assign(SLIDER_CONFIG.settings, preset);
-      updateShaderUniforms();
-      if (pane) pane.refresh();
-      setTimeout(() => {
-        isApplyingPreset = false;
-      }, 100);
-    };
-
-    const updateEffectFolderVisibility = (currentEffect: string) => {
-      Object.keys(effectFolders).forEach((name) => {
-        if (effectFolders[name]) {
-          effectFolders[name].hidden = name !== currentEffect;
-        }
-      });
-    };
-
-    const handleEffectChange = (newEffect: string) => {
-      if (shaderMaterial) {
-        shaderMaterial.uniforms.uEffectType.value = getEffectIndex(newEffect);
-      }
-      updateEffectFolderVisibility(newEffect);
-      const presetsFolder = pane?.children.find(
-        (child: any) => child.title === 'Effect Presets'
-      ) as any;
-      if (presetsFolder) {
-        const oldBinding = presetsFolder.children.find(
-          (child: any) => child.key === 'currentEffectPreset'
-        ) as any;
-        if (oldBinding) presetsFolder.remove(oldBinding);
-        presetsFolder.addBinding(SLIDER_CONFIG.settings, 'currentEffectPreset', {
-          label: 'Preset',
-          options: getPresetOptions(newEffect),
-        });
-      }
-      SLIDER_CONFIG.settings.currentEffectPreset = 'Default';
-      applyEffectPreset(newEffect, 'Default');
-      if (pane) pane.refresh();
-    };
-
-    const randomizeEffect = () => {
-      const effects = ['glass', 'frost', 'ripple', 'plasma', 'timeshift'];
-      const randomEffect = effects[Math.floor(Math.random() * effects.length)];
-      SLIDER_CONFIG.settings.currentEffect = randomEffect;
-      SLIDER_CONFIG.settings.globalIntensity = 0.5 + Math.random() * 1.5;
-      SLIDER_CONFIG.settings.speedMultiplier = 0.5 + Math.random() * 2.0;
-      SLIDER_CONFIG.settings.distortionStrength = 0.5 + Math.random() * 2.0;
-      SLIDER_CONFIG.settings.colorEnhancement = 0.7 + Math.random() * 1.3;
-      handleEffectChange(randomEffect);
-      updateShaderUniforms();
-      if (pane) pane.refresh();
-    };
-
-    const setupPane = () => {
-      pane = new Pane({ title: 'FX_CONTROLS' });
-
-      const generalFolder = pane.addFolder({ title: 'INTENSITY' });
-      generalFolder.addBinding(SLIDER_CONFIG.settings, 'globalIntensity', {
-        label: 'Global Intensity',
-        min: 0.1,
-        max: 2.0,
-        step: 0.1,
-      });
-      generalFolder.addBinding(SLIDER_CONFIG.settings, 'speedMultiplier', {
-        label: 'Speed',
-        min: 0.1,
-        max: 3.0,
-        step: 0.1,
-      });
-      generalFolder.addBinding(SLIDER_CONFIG.settings, 'distortionStrength', {
-        label: 'Distortion',
-        min: 0.1,
-        max: 3.0,
-        step: 0.1,
-      });
-      generalFolder.addBinding(SLIDER_CONFIG.settings, 'colorEnhancement', {
-        label: 'Color',
-        min: 0.5,
-        max: 2.0,
-        step: 0.1,
-      });
-
-      const timingFolder = pane.addFolder({ title: 'TIMING' });
-      timingFolder.addBinding(SLIDER_CONFIG.settings, 'transitionDuration', {
-        label: 'Transition',
-        min: 0.5,
-        max: 5.0,
-        step: 0.1,
-      });
-      timingFolder.addBinding(SLIDER_CONFIG.settings, 'autoSlideSpeed', {
-        label: 'Auto Slide',
-        min: 2000,
-        max: 10000,
-        step: 500,
-      });
-
-      const effectFolder = pane.addFolder({ title: 'EFFECT' });
-      effectFolder.addBinding(SLIDER_CONFIG.settings, 'currentEffect', {
-        label: 'Effect Type',
-        options: {
-          Glass: 'glass',
-          Frost: 'frost',
-          Ripple: 'ripple',
-          Plasma: 'plasma',
-          Timeshift: 'timeshift',
-        },
-      });
-      effectFolder
-        .addButton({ title: 'Randomize Effect' })
-        .on('click', randomizeEffect);
-
-      const presetsFolder = pane.addFolder({ title: 'Effect Presets' });
-      presetsFolder.addBinding(SLIDER_CONFIG.settings, 'currentEffectPreset', {
-        label: 'Preset',
-        options: getPresetOptions(SLIDER_CONFIG.settings.currentEffect),
-      });
-
-      const effectNames = ['glass', 'frost', 'ripple', 'plasma', 'timeshift'];
-      effectNames.forEach((name) => {
-        effectFolders[name] = pane!.addFolder({ title: `${name.toUpperCase()} SETTINGS` });
-      });
-      effectFolders.glass.addBinding(SLIDER_CONFIG.settings, 'glassRefractionStrength', {
-        label: 'Refraction',
-        min: 0.1,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.glass.addBinding(SLIDER_CONFIG.settings, 'glassChromaticAberration', {
-        label: 'Chromatic',
-        min: 0.1,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.glass.addBinding(SLIDER_CONFIG.settings, 'glassBubbleClarity', {
-        label: 'Bubble Clarity',
-        min: 0.1,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.glass.addBinding(SLIDER_CONFIG.settings, 'glassEdgeGlow', {
-        label: 'Edge Glow',
-        min: 0.0,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.glass.addBinding(SLIDER_CONFIG.settings, 'glassLiquidFlow', {
-        label: 'Liquid Flow',
-        min: 0.1,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.frost.addBinding(SLIDER_CONFIG.settings, 'frostIntensity', {
-        label: 'Frost Intensity',
-        min: 0.5,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.frost.addBinding(SLIDER_CONFIG.settings, 'frostCrystalSize', {
-        label: 'Crystal Size',
-        min: 0.3,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.frost.addBinding(SLIDER_CONFIG.settings, 'frostIceCoverage', {
-        label: 'Ice Coverage',
-        min: 0.1,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.frost.addBinding(SLIDER_CONFIG.settings, 'frostTemperature', {
-        label: 'Temperature',
-        min: 0.1,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.frost.addBinding(SLIDER_CONFIG.settings, 'frostTexture', {
-        label: 'Texture Detail',
-        min: 0.3,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.ripple.addBinding(SLIDER_CONFIG.settings, 'rippleFrequency', {
-        label: 'Frequency',
-        min: 10.0,
-        max: 50.0,
-        step: 1.0,
-      });
-      effectFolders.ripple.addBinding(SLIDER_CONFIG.settings, 'rippleAmplitude', {
-        label: 'Amplitude',
-        min: 0.02,
-        max: 0.2,
-        step: 0.01,
-      });
-      effectFolders.ripple.addBinding(SLIDER_CONFIG.settings, 'rippleWaveSpeed', {
-        label: 'Wave Speed',
-        min: 0.2,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.ripple.addBinding(SLIDER_CONFIG.settings, 'rippleRippleCount', {
-        label: 'Ripple Count',
-        min: 0.1,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.ripple.addBinding(SLIDER_CONFIG.settings, 'rippleDecay', {
-        label: 'Decay',
-        min: 0.2,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.plasma.addBinding(SLIDER_CONFIG.settings, 'plasmaIntensity', {
-        label: 'Plasma Intensity',
-        min: 0.5,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.plasma.addBinding(SLIDER_CONFIG.settings, 'plasmaSpeed', {
-        label: 'Plasma Speed',
-        min: 0.2,
-        max: 2.0,
-        step: 0.1,
-      });
-      effectFolders.plasma.addBinding(SLIDER_CONFIG.settings, 'plasmaEnergyIntensity', {
-        label: 'Energy',
-        min: 0.0,
-        max: 1.0,
-        step: 0.05,
-      });
-      effectFolders.plasma.addBinding(SLIDER_CONFIG.settings, 'plasmaContrastBoost', {
-        label: 'Contrast',
-        min: 0.0,
-        max: 1.0,
-        step: 0.05,
-      });
-      effectFolders.plasma.addBinding(SLIDER_CONFIG.settings, 'plasmaTurbulence', {
-        label: 'Turbulence',
-        min: 0.1,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.timeshift.addBinding(SLIDER_CONFIG.settings, 'timeshiftDistortion', {
-        label: 'Distortion',
-        min: 0.3,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.timeshift.addBinding(SLIDER_CONFIG.settings, 'timeshiftBlur', {
-        label: 'Blur',
-        min: 0.3,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.timeshift.addBinding(SLIDER_CONFIG.settings, 'timeshiftFlow', {
-        label: 'Flow',
-        min: 0.3,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.timeshift.addBinding(SLIDER_CONFIG.settings, 'timeshiftChromatic', {
-        label: 'Chromatic',
-        min: 0.0,
-        max: 3.0,
-        step: 0.1,
-      });
-      effectFolders.timeshift.addBinding(SLIDER_CONFIG.settings, 'timeshiftTurbulence', {
-        label: 'Turbulence',
-        min: 0.3,
-        max: 3.0,
-        step: 0.1,
-      });
-
-      updateEffectFolderVisibility(SLIDER_CONFIG.settings.currentEffect);
-
-      pane.on('change', (event: any) => {
-        if (isApplyingPreset) return;
-        if (event.target.key === 'currentEffect') {
-          handleEffectChange(SLIDER_CONFIG.settings.currentEffect);
-        } else if (event.target.key === 'currentEffectPreset') {
-          applyEffectPreset(
-            SLIDER_CONFIG.settings.currentEffect,
-            SLIDER_CONFIG.settings.currentEffectPreset
-          );
-        } else {
-          if (
-            !event.target.key.includes('currentEffect') &&
-            !event.target.key.includes('global') &&
-            !event.target.key.includes('Duration') &&
-            !event.target.key.includes('Speed')
-          ) {
-            SLIDER_CONFIG.settings.currentEffectPreset = 'Custom';
-            pane!.refresh();
-          }
-          updateShaderUniforms();
-        }
-      });
-
-      const paneEl = document.querySelector('.tp-dfwv') as HTMLElement | null;
-      if (paneEl) paneEl.style.display = 'none';
-    };
 
     // ---------- Navigation UI ----------
     const navContainer = el('slidesNav');
@@ -1291,6 +800,7 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
     // ---------- Navigation ----------
     const navigateToSlide = (targetIndex: number) => {
       if (isTransitioning || targetIndex === currentSlideIndex) return;
+      if (!gsap) return;
       stopAutoSlideTimer();
       quickResetProgress(currentSlideIndex);
       const currentTexture = slideTextures[currentSlideIndex];
@@ -1334,19 +844,21 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
     };
 
     // ---------- Texture loading ----------
-    const loadImageTexture = (src: string) => {
-      return new Promise<THREE.Texture>((resolve, reject) => {
-        const loader = new THREE.TextureLoader();
+    const loadImageTexture = async (src: string) => {
+      const THREE = await getThree();
+      const { TextureLoader, LinearFilter, Vector2 } = THREE;
+      return new Promise<Texture>((resolve, reject) => {
+        const loader = new TextureLoader();
         loader.setCrossOrigin('anonymous');
         const timeout = window.setTimeout(() => reject(new Error('Timeout')), 15000);
         loader.load(
           src,
           (texture) => {
             clearTimeout(timeout);
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
+            texture.minFilter = LinearFilter;
+            texture.magFilter = LinearFilter;
             texture.userData = {
-              size: new THREE.Vector2(
+              size: new Vector2(
                 (texture.image as HTMLImageElement).width,
                 (texture.image as HTMLImageElement).height
               ),
@@ -1364,9 +876,21 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
 
     // ---------- Renderer init ----------
     const initializeRenderer = async () => {
-      scene = new THREE.Scene();
-      camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-      renderer = new THREE.WebGLRenderer({
+      const [THREE, gsapModule] = await Promise.all([getThree(), import('gsap')]);
+      gsap = gsapModule.default;
+      const {
+        Mesh,
+        OrthographicCamera,
+        PlaneGeometry,
+        Scene,
+        ShaderMaterial,
+        Vector2,
+        WebGLRenderer,
+      } = THREE;
+
+      scene = new Scene();
+      camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      renderer = new WebGLRenderer({
         canvas,
         antialias: false,
         alpha: false,
@@ -1385,65 +909,80 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
         });
       };
 
-      shaderMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          uTexture1: { value: null },
-          uTexture2: { value: null },
-          uProgress: { value: 0.0 },
-          uResolution: { value: new THREE.Vector2(width, height) },
-          uTexture1Size: { value: new THREE.Vector2(1, 1) },
-          uTexture2Size: { value: new THREE.Vector2(1, 1) },
-          uEffectType: { value: getEffectIndex(SLIDER_CONFIG.settings.currentEffect) },
-          uGlobalIntensity: { value: SLIDER_CONFIG.settings.globalIntensity },
-          uSpeedMultiplier: { value: SLIDER_CONFIG.settings.speedMultiplier },
-          uDistortionStrength: { value: SLIDER_CONFIG.settings.distortionStrength },
-          uColorEnhancement: { value: SLIDER_CONFIG.settings.colorEnhancement },
-          uGlassRefractionStrength: { value: SLIDER_CONFIG.settings.glassRefractionStrength },
-          uGlassChromaticAberration: { value: SLIDER_CONFIG.settings.glassChromaticAberration },
-          uGlassBubbleClarity: { value: SLIDER_CONFIG.settings.glassBubbleClarity },
-          uGlassEdgeGlow: { value: SLIDER_CONFIG.settings.glassEdgeGlow },
-          uGlassLiquidFlow: { value: SLIDER_CONFIG.settings.glassLiquidFlow },
-          uFrostIntensity: { value: SLIDER_CONFIG.settings.frostIntensity },
-          uFrostCrystalSize: { value: SLIDER_CONFIG.settings.frostCrystalSize },
-          uFrostIceCoverage: { value: SLIDER_CONFIG.settings.frostIceCoverage },
-          uFrostTemperature: { value: SLIDER_CONFIG.settings.frostTemperature },
-          uFrostTexture: { value: SLIDER_CONFIG.settings.frostTexture },
-          uRippleFrequency: { value: SLIDER_CONFIG.settings.rippleFrequency },
-          uRippleAmplitude: { value: SLIDER_CONFIG.settings.rippleAmplitude },
-          uRippleWaveSpeed: { value: SLIDER_CONFIG.settings.rippleWaveSpeed },
-          uRippleRippleCount: { value: SLIDER_CONFIG.settings.rippleRippleCount },
-          uRippleDecay: { value: SLIDER_CONFIG.settings.rippleDecay },
-          uPlasmaIntensity: { value: SLIDER_CONFIG.settings.plasmaIntensity },
-          uPlasmaSpeed: { value: SLIDER_CONFIG.settings.plasmaSpeed },
-          uPlasmaEnergyIntensity: { value: SLIDER_CONFIG.settings.plasmaEnergyIntensity },
-          uPlasmaContrastBoost: { value: SLIDER_CONFIG.settings.plasmaContrastBoost },
-          uPlasmaTurbulence: { value: SLIDER_CONFIG.settings.plasmaTurbulence },
-          uTimeshiftDistortion: { value: SLIDER_CONFIG.settings.timeshiftDistortion },
-          uTimeshiftBlur: { value: SLIDER_CONFIG.settings.timeshiftBlur },
-          uTimeshiftFlow: { value: SLIDER_CONFIG.settings.timeshiftFlow },
-          uTimeshiftChromatic: { value: SLIDER_CONFIG.settings.timeshiftChromatic },
-          uTimeshiftTurbulence: { value: SLIDER_CONFIG.settings.timeshiftTurbulence },
-        },
-        vertexShader,
-        fragmentShader,
-      });
+      const uniforms = {
+        uTexture1: { value: null },
+        uTexture2: { value: null },
+        uProgress: { value: 0.0 },
+        uResolution: { value: new Vector2(width, height) },
+        uTexture1Size: { value: new Vector2(1, 1) },
+        uTexture2Size: { value: new Vector2(1, 1) },
+        uEffectType: { value: getEffectIndex(SLIDER_CONFIG.settings.currentEffect) },
+        uGlobalIntensity: { value: SLIDER_CONFIG.settings.globalIntensity },
+        uSpeedMultiplier: { value: SLIDER_CONFIG.settings.speedMultiplier },
+        uDistortionStrength: { value: SLIDER_CONFIG.settings.distortionStrength },
+        uColorEnhancement: { value: SLIDER_CONFIG.settings.colorEnhancement },
+        uGlassRefractionStrength: { value: SLIDER_CONFIG.settings.glassRefractionStrength },
+        uGlassChromaticAberration: { value: SLIDER_CONFIG.settings.glassChromaticAberration },
+        uGlassBubbleClarity: { value: SLIDER_CONFIG.settings.glassBubbleClarity },
+        uGlassEdgeGlow: { value: SLIDER_CONFIG.settings.glassEdgeGlow },
+        uGlassLiquidFlow: { value: SLIDER_CONFIG.settings.glassLiquidFlow },
+        uFrostIntensity: { value: SLIDER_CONFIG.settings.frostIntensity },
+        uFrostCrystalSize: { value: SLIDER_CONFIG.settings.frostCrystalSize },
+        uFrostIceCoverage: { value: SLIDER_CONFIG.settings.frostIceCoverage },
+        uFrostTemperature: { value: SLIDER_CONFIG.settings.frostTemperature },
+        uFrostTexture: { value: SLIDER_CONFIG.settings.frostTexture },
+        uRippleFrequency: { value: SLIDER_CONFIG.settings.rippleFrequency },
+        uRippleAmplitude: { value: SLIDER_CONFIG.settings.rippleAmplitude },
+        uRippleWaveSpeed: { value: SLIDER_CONFIG.settings.rippleWaveSpeed },
+        uRippleRippleCount: { value: SLIDER_CONFIG.settings.rippleRippleCount },
+        uRippleDecay: { value: SLIDER_CONFIG.settings.rippleDecay },
+        uPlasmaIntensity: { value: SLIDER_CONFIG.settings.plasmaIntensity },
+        uPlasmaSpeed: { value: SLIDER_CONFIG.settings.plasmaSpeed },
+        uPlasmaEnergyIntensity: { value: SLIDER_CONFIG.settings.plasmaEnergyIntensity },
+        uPlasmaContrastBoost: { value: SLIDER_CONFIG.settings.plasmaContrastBoost },
+        uPlasmaTurbulence: { value: SLIDER_CONFIG.settings.plasmaTurbulence },
+        uTimeshiftDistortion: { value: SLIDER_CONFIG.settings.timeshiftDistortion },
+        uTimeshiftBlur: { value: SLIDER_CONFIG.settings.timeshiftBlur },
+        uTimeshiftFlow: { value: SLIDER_CONFIG.settings.timeshiftFlow },
+        uTimeshiftChromatic: { value: SLIDER_CONFIG.settings.timeshiftChromatic },
+        uTimeshiftTurbulence: { value: SLIDER_CONFIG.settings.timeshiftTurbulence },
+      };
 
-      const geometry = new THREE.PlaneGeometry(2, 2);
-      const mesh = new THREE.Mesh(geometry, shaderMaterial);
+      const geometry = new PlaneGeometry(2, 2);
+      const makeMaterial = (effectName: string) =>
+        new ShaderMaterial({
+          uniforms,
+          vertexShader,
+          fragmentShader: buildFragmentShader(effectName),
+        });
+
+      const mesh = new Mesh(geometry, makeMaterial(SLIDER_CONFIG.settings.currentEffect));
+      shaderMaterial = mesh.material as ShaderMaterial;
       scene.add(mesh);
+
       if (requestRender) requestRender();
 
-      const textureResults = await Promise.all(
-        currentSlides.map((s) => loadImageTexture(s.imageUrl).catch(() => null))
+      // Show the first slide as soon as its texture arrives, then load the
+      // remaining slides in the background so nothing blocks initial paint.
+      const firstTexture = await loadImageTexture(currentSlides[0].imageUrl).catch(
+        () => null
       );
-      textureResults.forEach((texture) => {
+      if (firstTexture) {
+        slideTextures.push(firstTexture);
+        shaderMaterial.uniforms.uTexture1.value = firstTexture;
+        shaderMaterial.uniforms.uTexture1Size.value = firstTexture.userData.size;
+        if (requestRender) requestRender();
+      }
+
+      const remainingResults = await Promise.all(
+        currentSlides.slice(1).map((s) => loadImageTexture(s.imageUrl).catch(() => null))
+      );
+      remainingResults.forEach((texture) => {
         if (texture) slideTextures.push(texture);
       });
 
       if (slideTextures.length >= 2) {
-        shaderMaterial.uniforms.uTexture1.value = slideTextures[0];
         shaderMaterial.uniforms.uTexture2.value = slideTextures[1];
-        shaderMaterial.uniforms.uTexture1Size.value = slideTextures[0].userData.size;
         shaderMaterial.uniforms.uTexture2Size.value = slideTextures[1].userData.size;
         texturesLoaded = true;
         sliderEnabled = true;
@@ -1508,12 +1047,6 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
             (currentSlideIndex - 1 + currentSlides.length) % currentSlides.length;
           navigateToSlide(prevIndex);
         }
-      } else if (e.code === 'KeyH') {
-        e.preventDefault();
-        const paneEl = document.querySelector('.tp-dfwv') as HTMLElement | null;
-        if (paneEl) {
-          paneEl.style.display = paneEl.style.display === 'none' ? 'block' : 'none';
-        }
       }
     };
 
@@ -1540,7 +1073,6 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
     createSlidesNavigation();
     updateCounter(0);
     updateNavigationState(0);
-    setupPane();
 
     container.addEventListener('click', handleClick);
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
@@ -1549,7 +1081,7 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
     window.addEventListener('resize', handleResize);
     document.addEventListener('visibilitychange', handleVisibility);
 
-    initializeRenderer();
+    initializeRenderer().catch(() => {});
 
     return () => {
       container.removeEventListener('click', handleClick);
@@ -1564,16 +1096,6 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
       if (renderer) {
         renderer.dispose();
       }
-      if (pane) {
-        try {
-          pane.dispose();
-        } catch (err) {
-          /* noop */
-        }
-        pane = null;
-      }
-      const paneEl = document.querySelector('.tp-dfwv');
-      if (paneEl) paneEl.remove();
       if (navContainer) navContainer.innerHTML = '';
     };
   }, [slidesKey]); // eslint-disable-line react-hooks/exhaustive-deps

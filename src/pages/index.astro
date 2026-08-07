@@ -43,7 +43,7 @@ const jsonLd = [faqLd, breadcrumbLd];
 ---
 
 <Layout title={title} description={description} jsonLd={jsonLd}>
-  <MotionProvider client:load />
+  <MotionProvider client:idle />
 
   <div class="min-h-screen w-full bg-black text-white relative font-geist selection:bg-[#C6FF00] selection:text-black flex flex-col justify-between overflow-x-clip">
     <div
@@ -69,4 +69,54 @@ const jsonLd = [faqLd, breadcrumbLd];
       <Footer client:visible />
     </div>
   </div>
+
+  <!--
+    Hero silk background runs in its own tiny script (not tied to React hydration)
+    so the original canvas animation starts the moment the page JS executes.
+  -->
+  <script>
+    import { startSilkAnimation } from '../utils/silkCanvas';
+    const heroSilkCanvas = document.getElementById('hero-silk-canvas');
+    if (heroSilkCanvas instanceof HTMLCanvasElement) {
+      startSilkAnimation(heroSilkCanvas);
+    }
+  </script>
+
+  <!--
+    Hero entrance animation runs in its own early script (not tied to React
+    hydration) so it starts as soon as the DOM is parsed, right at page load.
+    Skipped entirely when the user prefers reduced motion.
+  -->
+  <script>
+    import { gsap } from 'gsap';
+
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      document
+        .querySelectorAll('#sticker-release, #sticker-dna, #heading-architect, #btn-initialize-system, #status-container-click, #hero-bio, #latency-container')
+        .forEach((el) => el.removeAttribute('style'));
+    } else {
+    const heroTl = gsap.timeline({
+      defaults: { ease: 'power3.out', duration: 0.6 },
+      onComplete: () => {
+        gsap.set(
+          ['#btn-initialize-system', '#heading-architect', '#sticker-release', '#sticker-dna'],
+          { clearProps: 'opacity' }
+        );
+      },
+    });
+
+    heroTl
+      .from('header', { y: -30, opacity: 0, duration: 0.5, clearProps: 'transform,translate,rotate,scale,opacity' })
+      .from('#heading-architect', { y: 24, opacity: 0, scale: 0.96, duration: 0.7, ease: 'power3.out' }, '-=0.2')
+      .from('#sticker-release', { scale: 0, rotation: -12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
+      .from('#sticker-dna', { scale: 0, rotation: 12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
+      .from('#btn-initialize-system', { y: 20, opacity: 0 }, '-=0.3')
+      .from('#status-container-click', { x: 20, opacity: 0 }, '-=0.4')
+      .from('#hero-bio', { y: 20, opacity: 0, duration: 0.6 }, '-=0.5')
+      .from('#latency-container', { x: 20, opacity: 0, duration: 0.6 }, '-=0.7');
+    }
+  </script>
 </Layout>

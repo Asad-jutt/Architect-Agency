@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import { Navbar } from '../components/Navbar';
 import { WorksPage } from '../components/pages/WorksPage';
-import { Footer } from '../components/ui/modem-animated-footer';
 import { PROJECTS_LIST } from '../data/projectsData';
 import { SITE_URL } from '../data/site';
 
@@ -34,16 +33,25 @@ const breadcrumbLd = {
 ---
 
 <Layout title={title} description={description} jsonLd={[itemListLd, breadcrumbLd]}>
-  <div class="min-h-screen w-full bg-black text-white relative flex flex-col justify-between overflow-x-clip">
-    <div class="relative z-10 flex-1 flex flex-col">
-      <Navbar client:load pathname="/works" />
-
-      <main class="flex-1 flex flex-col">
-        <WorksPage client:load />
-      </main>
+  <Fragment slot="head">
+    {
+      PROJECTS_LIST.map((p, i) => (
+        <link rel="preload" as="image" href={p.imageUrl} fetchpriority={i === 0 ? 'high' : 'low'} />
+      ))
+    }
+  </Fragment>
+  <div
+    class="relative w-full bg-black text-white overflow-hidden"
+    style="height:100vh;height:100dvh;"
+  >
+    <!-- Full-viewport WebGL slider -->
+    <div class="absolute inset-0 z-0">
+      <WorksPage client:load />
     </div>
-    <div class="relative z-10">
-      <Footer client:load />
+
+    <!-- Overlay navbar -->
+    <div class="absolute inset-x-0 top-0 z-30">
+      <Navbar client:load pathname="/works" />
     </div>
   </div>
 

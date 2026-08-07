@@ -37,7 +37,7 @@ export const WorksPage: React.FC<WorksPageProps> = ({
   };
 
   return (
-    <div className="w-full flex-1 min-h-0 bg-black text-white font-mono-code select-none overflow-hidden relative">
+    <div className="w-full h-full bg-black text-white font-mono-code select-none overflow-hidden relative">
       <WebGLSlider
         slides={slides}
         onSelectProject={handleSelectProject}

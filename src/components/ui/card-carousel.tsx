@@ -28,6 +28,7 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({
   showPagination = true,
   showNavigation = true,
 }) => {
+  const [activeIndex, setActiveIndex] = React.useState(0)
   const css = `
   .swiper {
     width: 100%;
@@ -96,12 +97,6 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({
     font-size: 16px !important;
     font-weight: bold !important;
   }
-
-  .swiper-button-next:hover, .swiper-button-prev:hover {
-    border: none !important;
-    background: rgba(198, 255, 0, 0.1) !important;
-    color: #C6FF00 !important;
-  }
   `
 
   return (
@@ -137,10 +132,15 @@ export const CardCarousel: React.FC<CardCarouselProps> = ({
             : false
         }
         modules={[EffectCoverflow, Autoplay, Pagination, Navigation]}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
         {React.Children.map(children, (child, index) => (
           <SwiperSlide key={index}>
-            {child}
+            {React.isValidElement(child)
+              ? React.cloneElement(child as React.ReactElement<{ isActive?: boolean }>, {
+                  isActive: index === activeIndex,
+                })
+              : child}
           </SwiperSlide>
         ))}
         <div className="swiper-button-prev hidden sm:flex" />

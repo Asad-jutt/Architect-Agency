@@ -103,9 +103,8 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ playBeep = () =>
                   itemsLength={PROCESS_STEPS.length}
                   index={index}
                   variant="cyber"
-                  size="lg"
                   onClick={() => playBeep(650 + index * 100)}
-                  className="w-full sm:w-[70%] min-w-full sm:min-w-[70%] sm:max-w-[70%] min-h-[480px] sm:min-h-[560px] md:min-h-[640px] shrink-0 border-2 border-white/15 bg-zinc-950/95 hover:border-[#C6FF00] transition-colors cursor-pointer rounded-none group shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
+                  className="w-full sm:w-[70%] min-w-full sm:min-w-[70%] sm:max-w-[70%] min-h-[340px] sm:min-h-[380px] md:min-h-[420px] shrink-0 border-2 border-white/15 bg-zinc-950/95 hover:border-[#C6FF00] transition-colors cursor-pointer rounded-none group shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
                 >
                   <ProcessCardTitle className="p-3 sm:p-5 md:p-6 border-r border-white/15 bg-black/80 flex flex-col justify-between shrink-0 w-14 sm:w-20 md:w-24">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#C6FF00] text-black font-space font-bold text-xs sm:text-sm flex justify-center items-center shadow-[0_0_15px_rgba(198,255,0,0.3)] shrink-0">

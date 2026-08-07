@@ -7,42 +7,42 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function useGsapLenis() {
   useLayoutEffect(() => {
-    // 1. Initialize Lenis Smooth Scroll
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 1.1,
-      touchMultiplier: 1.5,
-    });
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
-    // Synchronize Lenis scroll position with GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-
-    const updateTicker = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(0);
-
-    // 2. Setup GSAP Page Load & Scroll Animations
-    const ctx = gsap.context(() => {
-      // --- Page Load Sequence (Hero Section) ---
-      const heroTl = gsap.timeline({ 
-        defaults: { ease: 'power3.out', duration: 0.6 },
-        onComplete: () => {
-          gsap.set(['#btn-initialize-system', '#heading-architect', '#sticker-release', '#sticker-dna'], { clearProps: 'opacity' });
-        }
+    // 1. Initialize Lenis Smooth Scroll — desktop only, and never for
+    //    users who prefer reduced motion. Native scroll is cheaper and
+    //    more reliable on touch devices.
+    let lenis: Lenis | null = null;
+    let updateTicker: ((time: number) => void) | null = null;
+    if (!isTouchDevice && !prefersReducedMotion) {
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 1.1,
       });
 
-      heroTl
-        .from('header', { y: -30, opacity: 0, duration: 0.5 })
-        .from('#heading-architect', { y: 24, opacity: 0, scale: 0.96, duration: 0.7, ease: 'power3.out' }, '-=0.2')
-        .from('#sticker-release', { scale: 0, rotation: -12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
-        .from('#sticker-dna', { scale: 0, rotation: 12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
-        .from('#btn-initialize-system', { y: 20, opacity: 0 }, '-=0.3')
-        .from('#status-container-click', { x: 20, opacity: 0 }, '-=0.4');
+      // Synchronize Lenis scroll position with GSAP ScrollTrigger
+      lenis.on('scroll', ScrollTrigger.update);
+
+      updateTicker = (time: number) => {
+        lenis?.raf(time * 1000);
+      };
+
+      gsap.ticker.add(updateTicker);
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    // 2. Setup GSAP Scroll-into-view Animations (hero entrance runs in an
+    //    early inline script in index.astro, independent of React hydration)
+    const ctx = gsap.context(() => {
+      // Skip scroll-reveal animations entirely when reduced motion is requested.
+      if (prefersReducedMotion) return;
 
       // --- Scroll-into-view Animations for Sections ---
 
@@ -163,8 +163,8 @@ export function useGsapLenis() {
         window.removeEventListener('architect:section-mounted', handleSectionMounted);
       }
       ctx.revert();
-      lenis.destroy();
-      gsap.ticker.remove(updateTicker);
+      if (lenis) lenis.destroy();
+      if (updateTicker) gsap.ticker.remove(updateTicker);
     };
   }, []);
 }

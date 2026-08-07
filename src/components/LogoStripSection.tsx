@@ -37,7 +37,7 @@ export const LogoStripSection: React.FC<LogoStripSectionProps> = () => {
           ribbon={true}
           ribbonColor="#C6FF00"
           ribbonWidth={78}
-          pauseOnHover={true}
+          pauseOnHover={false}
         />
       </div>
     </section>

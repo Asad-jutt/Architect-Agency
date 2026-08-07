@@ -1,7 +1,35 @@
 @import "tailwindcss";
 
+/* dvh-aware full-viewport heights (avoids iOS URL-bar jump; falls back to vh) */
+@utility min-h-hero {
+  min-height: calc(100vh - 80px);
+  min-height: calc(100dvh - 80px);
+}
+
 @theme {
   --breakpoint-xs: 30rem;
+
+  /* shadcn-compatible tokens mapped to the site's brutalist palette */
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  --color-card: #12130f;
+  --color-card-foreground: #ffffff;
+  --color-popover: #12130f;
+  --color-popover-foreground: #ffffff;
+  --color-primary: #c6ff00;
+  --color-primary-foreground: #000000;
+  --color-secondary: #18181b;
+  --color-secondary-foreground: #ffffff;
+  --color-muted: #12130f;
+  --color-muted-foreground: #a1a1aa;
+  --color-accent: #1f1f1f;
+  --color-accent-foreground: #ffffff;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-input: rgba(255, 255, 255, 0.15);
+  --color-ring: #c6ff00;
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer utilities {
@@ -121,4 +149,153 @@
 .scroller-mask {
   mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* ============================================================
+   Silk Hero Background (CSS-only, GPU accelerated)
+   Renders instantly with the initial HTML — no JS, no canvas.
+   ============================================================ */
+.silk-bg {
+  opacity: 0.5;
+}
+
+.silk-bg-base {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #191919 0%, #242424 50%, #101010 100%);
+}
+
+.silk-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+
+.silk-blob-1 {
+  width: 55vmax;
+  height: 55vmax;
+  left: -12vmax;
+  top: -22vmax;
+  background: radial-gradient(circle at center, rgba(109, 104, 117, 0.55) 0%, transparent 65%);
+  animation: silk-drift-1 26s ease-in-out infinite alternate;
+}
+
+.silk-blob-2 {
+  width: 46vmax;
+  height: 46vmax;
+  right: -14vmax;
+  top: 4vmax;
+  background: radial-gradient(circle at center, rgba(138, 134, 145, 0.5) 0%, transparent 65%);
+  animation: silk-drift-2 32s ease-in-out infinite alternate;
+}
+
+.silk-blob-3 {
+  width: 40vmax;
+  height: 40vmax;
+  left: 22vmax;
+  bottom: -24vmax;
+  background: radial-gradient(circle at center, rgba(88, 84, 98, 0.5) 0%, transparent 65%);
+  animation: silk-drift-3 38s ease-in-out infinite alternate;
+}
+
+.silk-sheen {
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: -40%;
+  width: 40%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  will-change: transform;
+  animation: silk-sheen 14s ease-in-out infinite;
+}
+
+.silk-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.06;
+}
+
+@keyframes silk-drift-1 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(6vmax, 4vmax, 0) scale(1.15); }
+}
+
+@keyframes silk-drift-2 {
+  0% { transform: translate3d(0, 0, 0) scale(1.05); }
+  100% { transform: translate3d(-5vmax, 6vmax, 0) scale(0.95); }
+}
+
+@keyframes silk-drift-3 {
+  0% { transform: translate3d(0, 0, 0) scale(0.95); }
+  100% { transform: translate3d(4vmax, -5vmax, 0) scale(1.1); }
+}
+
+@keyframes silk-sheen {
+  0% { transform: translateX(0) skewX(-18deg); }
+  100% { transform: translateX(350%) skewX(-18deg); }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .silk-blob,
+  .silk-sheen {
+    animation: none;
+  }
+}
+
+/* Global reduced-motion: kill non-essential CSS animations/transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Override Tailwind's layered min-h-screen utility with an iOS-safe dvh value.
+   Unlayered CSS beats layered utilities in the cascade. */
+.min-h-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Prevent horizontal overflow on any viewport (small phones, rotated devices) */
+html,
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+/* Respect safe-area insets on notched phones */
+@supports (padding: max(0px)) {
+  .safe-pad-x {
+    padding-left: max(env(safe-area-inset-left), 0px);
+    padding-right: max(env(safe-area-inset-right), 0px);
+  }
+  .safe-pad-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 0px);
+  }
+}
+
+/* Fluid type helpers used across sections (industry-standard clamp scale) */
+.text-fluid-hero {
+  font-size: clamp(2.5rem, 9vw, 8rem);
+}
+.text-fluid-h2 {
+  font-size: clamp(1.75rem, 5.5vw, 3.75rem);
 }

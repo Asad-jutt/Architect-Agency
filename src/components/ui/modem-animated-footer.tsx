@@ -40,7 +40,7 @@ export const Footer: React.FC<FooterProps> = ({
   socialLinks,
   navLinks,
   creatorName = "ARCHITECT_OPERATIVES",
-  creatorUrl = "#",
+  creatorUrl = "/",
   brandIcon,
   className = ""
 }) => {
@@ -68,21 +68,27 @@ export const Footer: React.FC<FooterProps> = ({
   ];
 
   const defaultNavLinks: FooterLink[] = navLinks || [
-    { label: "// SELECTED_WORKS", href: "#section-project-cards" },
-    { label: "// OUR_PROCESS", href: "#section-process" },
-    { label: "// MANIFESTO", href: "#section-about" },
-    { label: "// OPERATIVES", href: "#section-team" },
-    { label: "// PROTOCOL_FAQ", href: "#section-faq" },
+    { label: "// SELECTED_WORKS", href: "/works" },
+    { label: "// OUR_PROCESS", href: "/#section-process" },
+    { label: "// MANIFESTO", href: "/#section-about" },
+    { label: "// OPERATIVES", href: "/#section-team" },
+    { label: "// PROTOCOL_FAQ", href: "/#section-faq" },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#')) {
+    const hashIndex = href.indexOf('#');
+    if (hashIndex < 0) return;
+    const targetId = href.slice(hashIndex);
+    const targetPath = href.slice(0, hashIndex) || '/';
+    const onTargetPage =
+      targetPath === '/' || window.location.pathname.startsWith(targetPath);
+    if (onTargetPage) {
       e.preventDefault();
-      const target = document.querySelector(href);
+      const target = document.querySelector(targetId);
       if (target) {
         target.scrollIntoView({ behavior: 'smooth' });
       } else {
-        window.location.href = `/${href}`;
+        window.location.href = `/${targetId}`;
       }
     }
   };
@@ -187,36 +193,38 @@ export const Footer: React.FC<FooterProps> = ({
               )}
 
               {/* Back to top trigger */}
-              <button
-                onClick={scrollToTop}
-                className="font-mono-code text-xs text-[#C6FF00] hover:text-white bg-[#12130F] border border-white/10 hover:border-[#C6FF00] px-2.5 py-1 rounded transition-all cursor-pointer uppercase font-bold"
-              >
-                ▲ TOP
-              </button>
             </div>
           </div>
         </div>
 
-        {/* Giant Background Text */}
-        <div 
-          className="bg-gradient-to-b from-white/35 via-white/15 to-transparent bg-clip-text text-transparent leading-none absolute left-1/2 -translate-x-1/2 bottom-24 md:bottom-16 font-syne font-extrabold tracking-tighter pointer-events-none select-none text-center px-2 uppercase z-0"
-          style={{
-            fontSize: 'clamp(3.5rem, 13vw, 11rem)',
-            maxWidth: '98vw'
-          }}
+        {/* Giant Background Text - Infinite Marquee */}
+        <div
+          className="absolute bottom-24 md:bottom-16 left-1/2 -translate-x-1/2 w-full overflow-hidden z-0 pointer-events-none select-none"
+          style={{ maxWidth: '98vw' }}
         >
-          {brandName}
+          <div className="flex animate-scroll-horizontal" style={{ '--scroll-duration': '35s' } as React.CSSProperties}>
+            {[0, 1].map((copy) => (
+              <div
+                key={copy}
+                aria-hidden={copy === 1}
+                className="flex-shrink-0 whitespace-nowrap px-2 uppercase bg-gradient-to-b from-white/35 via-white/15 to-transparent bg-clip-text text-transparent leading-none font-syne font-extrabold tracking-tighter"
+                style={{ fontSize: 'clamp(3.5rem, 13vw, 11rem)', marginRight: '0.5em' }}
+              >
+                {brandName}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Bottom Floating Interactive Logo Pill */}
         <div 
           onClick={scrollToTop}
-          className="absolute group hover:border-[#C6FF00] duration-300 shadow-[0_0_25px_rgba(198,255,0,0.25)] bottom-20 md:bottom-16 backdrop-blur-md rounded-2xl bg-black/80 left-1/2 border border-white/20 flex items-center justify-center p-2.5 -translate-x-1/2 z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+          className="absolute group hover:border-[#C6FF00] duration-300 shadow-[0_0_25px_rgba(198,255,0,0.25)] bottom-20 md:bottom-16 backdrop-blur-md rounded-2xl bg-black/80 left-1/2 border border-white/20 flex items-center justify-center p-2 -translate-x-1/2 z-20 cursor-pointer hover:scale-105 active:scale-95 transition-transform"
           title="Return to System Top"
         >
-          <div className="w-10 sm:w-14 md:w-16 h-10 sm:h-14 md:h-16 bg-[#C6FF00] rounded-xl flex items-center justify-center shadow-lg group-hover:bg-white transition-colors duration-300">
+          <div className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 bg-[#C6FF00] rounded-xl flex items-center justify-center shadow-lg group-hover:bg-white transition-colors duration-300">
             {brandIcon || (
-              <Terminal className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 text-black group-hover:text-black transition-colors" />
+              <Terminal className="w-4 sm:w-6 md:w-7 h-4 sm:h-6 md:h-7 text-black group-hover:text-black transition-colors" />
             )}
           </div>
         </div>
