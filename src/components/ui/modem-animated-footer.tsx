@@ -70,7 +70,6 @@ export const Footer: React.FC<FooterProps> = ({
   const defaultNavLinks: FooterLink[] = navLinks || [
     { label: "// SELECTED_WORKS", href: "/works" },
     { label: "// OUR_PROCESS", href: "/#section-process" },
-    { label: "// MANIFESTO", href: "/#section-about" },
     { label: "// OPERATIVES", href: "/#section-team" },
     { label: "// PROTOCOL_FAQ", href: "/#section-faq" },
   ];

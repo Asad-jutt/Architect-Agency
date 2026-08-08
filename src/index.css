@@ -2,8 +2,8 @@
 
 /* dvh-aware full-viewport heights (avoids iOS URL-bar jump; falls back to vh) */
 @utility min-h-hero {
-  min-height: calc(100vh - 80px);
-  min-height: calc(100dvh - 80px);
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 @theme {
