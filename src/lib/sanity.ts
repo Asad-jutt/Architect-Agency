@@ -63,7 +63,7 @@ function mapProjectToLocal(doc: any): ProjectData | null {
     client: doc.client || 'UNKNOWN CLIENT',
     accentColor:
       (doc.accentColor && accentColors.includes(doc.accentColor) ? doc.accentColor : '#C6FF00'),
-    imageUrl: imageUrl || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: imageUrl || 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=60&w=1200&auto=format&fit=crop',
     galleryImages: galleryImages.length > 0 ? galleryImages : [imageUrl || ''],
     description: doc.description || doc.fullOverview || '',
     fullOverview: doc.fullOverview || doc.description || '',

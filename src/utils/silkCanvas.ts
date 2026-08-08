@@ -13,10 +13,15 @@ export const startSilkAnimation = (canvas: HTMLCanvasElement): (() => void) => {
   const noiseIntensity = 0.8;
   let animationRef = 0;
 
+  const isCoarsePointer =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(pointer: coarse)').matches;
+
   const resizeCanvas = () => {
-    // Scale resolution down slightly for ultra-smooth 60fps rendering
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    const renderScale = 0.5; // Smooth performance optimization
+    // Mobile gets a coarser render target and lower DPR cap so the per-pixel
+    // silk shader uses a fraction of the CPU/GPU work while staying smooth.
+    const dpr = Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1 : 1.5);
+    const renderScale = isCoarsePointer ? 0.4 : 0.5; // Smooth performance optimization
     canvas.width = Math.floor((window.innerWidth * dpr) * renderScale);
     canvas.height = Math.floor((window.innerHeight * dpr) * renderScale);
   };
@@ -37,37 +42,16 @@ export const startSilkAnimation = (canvas: HTMLCanvasElement): (() => void) => {
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      isVisible = entry.isIntersecting;
-      if (isVisible && !animationRef) {
-        animate();
-      }
-    },
-    { threshold: 0.05 }
-  );
-  observer.observe(canvas);
+  const FRAME_INTERVAL = 1000 / 30;
+  let lastFrameTime = 0;
 
-  const handleVisibility = () => {
-    if (document.hidden) {
-      if (animationRef) {
-        cancelAnimationFrame(animationRef);
-        animationRef = 0;
-      }
-    } else if (isVisible && !prefersReducedMotion) {
-      animate();
-    }
-  };
-  document.addEventListener('visibilitychange', handleVisibility);
-
-  const animate = () => {
-    if (!isVisible || document.hidden || prefersReducedMotion) {
-      animationRef = 0;
-      return;
-    }
-
+  // Paint a single frame of the silk texture. Kept separate from the animation
+  // loop so mobile can render one static frame and skip looping entirely.
+  const paint = () => {
     const { width, height } = canvas;
     if (width === 0 || height === 0) return;
+
+    const tOffset = speed * time;
 
     // Create gradient background
     const gradient = ctx.createLinearGradient(0, 0, width, height);
@@ -83,7 +67,6 @@ export const startSilkAnimation = (canvas: HTMLCanvasElement): (() => void) => {
     const data = imageData.data;
 
     const step = 2;
-    const tOffset = speed * time;
 
     for (let y = 0; y < height; y += step) {
       for (let x = 0; x < width; x += step) {
@@ -149,6 +132,57 @@ export const startSilkAnimation = (canvas: HTMLCanvasElement): (() => void) => {
     ctx.fillRect(0, 0, width, height);
 
     time += 1;
+  };
+
+  // Mobile: paint a single static frame and never start the animation loop.
+  // The effect is a subtle backdrop, so a still frame keeps the main thread
+  // free for interaction and cuts continuous CPU/GPU load on low-end phones.
+  if (isCoarsePointer) {
+    paint();
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible && !animationRef) {
+        animate();
+      }
+    },
+    { threshold: 0.05 }
+  );
+  observer.observe(canvas);
+
+  const handleVisibility = () => {
+    if (document.hidden) {
+      if (animationRef) {
+        cancelAnimationFrame(animationRef);
+        animationRef = 0;
+      }
+    } else if (isVisible && !prefersReducedMotion) {
+      animate();
+    }
+  };
+  document.addEventListener('visibilitychange', handleVisibility);
+
+  const animate = () => {
+    if (!isVisible || document.hidden || prefersReducedMotion) {
+      animationRef = 0;
+      return;
+    }
+
+    // Throttle to ~30fps. The silk effect is subtle; halving the frame rate
+    // roughly halves the per-frame shader cost on low-end devices.
+    const now = performance.now();
+    if (now - lastFrameTime < FRAME_INTERVAL) {
+      animationRef = requestAnimationFrame(animate);
+      return;
+    }
+    lastFrameTime = now;
+
+    paint();
     animationRef = requestAnimationFrame(animate);
   };
 

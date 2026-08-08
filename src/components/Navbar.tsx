@@ -107,7 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({ playBeep, pathname }) => {
           onClick={() => beep(700)}
           className={`flex items-center gap-1 sm:gap-1.5 transition-colors duration-150 py-1.5 px-1.5 sm:px-2.5 border border-transparent cursor-pointer text-[10px] sm:text-[11px] min-h-[36px] no-underline outline-none [-webkit-tap-highlight-color:transparent] ${
             isWorks || isProjectDetail
-              ? 'text-[#C6FF00] font-bold border-[#C6FF00]/40 bg-[#12130F]'
+              ? 'text-[#C6FF00] font-bold border-[#C6FF00]/40'
               : 'text-[#C6FF00] hover:text-white'
           }`}
           id="nav-link-works"
@@ -142,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({ playBeep, pathname }) => {
           onClick={() => beep(800)}
           className={`flex items-center gap-1 sm:gap-1.5 transition-colors duration-150 py-1.5 px-1.5 sm:px-2.5 border border-transparent cursor-pointer text-[10px] sm:text-[11px] min-h-[36px] no-underline outline-none [-webkit-tap-highlight-color:transparent] ${
             isContact
-              ? 'text-[#C6FF00] font-bold border-[#C6FF00]/40 bg-[#12130F]'
+              ? 'text-[#C6FF00] font-bold border-[#C6FF00]/40'
               : 'text-white/80 hover:text-[#C6FF00]'
           }`}
           id="nav-link-contact"

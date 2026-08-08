@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Self-hosted Syne (the LCP hero font) so the heading paints with the web
+   font as fast as possible — no third-party CSS round-trip. Variable font,
+   covers weights 700-900 (Syne has no true 900; 900 clamps to 800). */
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700 900;
+  src: url('/fonts/Syne.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
 /* dvh-aware full-viewport heights (avoids iOS URL-bar jump; falls back to vh) */
 @utility min-h-hero {
   min-height: 100vh;
@@ -279,6 +292,14 @@ html,
 body {
   overflow-x: clip;
   max-width: 100%;
+}
+
+/* Skip rendering sections below the first fold until they scroll near the
+   viewport. Cuts initial layout/paint work on mobile. The hero (first child)
+   and the logo strip (second child) are kept fully rendered for LCP. */
+main > section:nth-child(n+3) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
 }
 
 /* Respect safe-area insets on notched phones */

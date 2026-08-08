@@ -52,10 +52,10 @@ const jsonLd = [faqLd, breadcrumbLd];
     />
 
     <div class="relative z-10 flex-1 flex flex-col justify-between">
-      <Navbar client:load pathname="/" />
+      <Navbar client:idle pathname="/" />
 
       <main class="flex-1 flex flex-col">
-        <HeroSection client:load />
+        <HeroSection client:idle />
         <LogoStripSection client:visible />
         <ProjectCardsSection client:visible />
         <ProcessSection client:visible />
@@ -93,6 +93,9 @@ const jsonLd = [faqLd, breadcrumbLd];
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isCoarsePointer =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(pointer: coarse)').matches;
     if (prefersReducedMotion) {
       document
         .querySelectorAll('#sticker-release, #sticker-dna, #heading-architect, #btn-initialize-system, #status-container-click, #hero-bio, #latency-container')
@@ -109,8 +112,14 @@ const jsonLd = [faqLd, breadcrumbLd];
     });
 
     heroTl
-      .from('header', { y: -30, opacity: 0, duration: 0.5, clearProps: 'transform,translate,rotate,scale,opacity' })
-      .from('#heading-architect', { y: 24, opacity: 0, scale: 0.96, duration: 0.7, ease: 'power3.out' }, '-=0.2')
+      .from('header', { y: -30, opacity: 0, duration: 0.5, clearProps: 'transform,translate,rotate,scale,opacity' });
+    // The H1 is the LCP element — animating it with opacity:0 delays the
+    // first meaningful paint. On touch devices leave it fully visible so
+    // it renders immediately (the surrounding elements still animate).
+    if (!isCoarsePointer) {
+      heroTl.from('#heading-architect', { y: 24, opacity: 0, scale: 0.96, duration: 0.7, ease: 'power3.out' }, '-=0.2');
+    }
+    heroTl
       .from('#sticker-release', { scale: 0, rotation: -12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
       .from('#sticker-dna', { scale: 0, rotation: 12, opacity: 0, ease: 'back.out(1.5)' }, '-=0.3')
       .from('#btn-initialize-system', { y: 20, opacity: 0 }, '-=0.3')
