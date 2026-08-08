@@ -106,9 +106,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
 
             {project.liveUrl && (
               <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/contact"
                 onClick={() => triggerBeep(900)}
                 className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#C6FF00] text-black font-syne font-extrabold text-sm uppercase hover:bg-white transition-all cursor-pointer shadow-[0_0_20px_rgba(198,255,0,0.3)] hover:scale-105 active:scale-95 shrink-0"
                 id="btn-live-preview"
