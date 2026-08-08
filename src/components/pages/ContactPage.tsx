@@ -33,6 +33,7 @@ import {
 } from '../ui/select';
 import { Separator } from '../ui/separator';
 import { Textarea } from '../ui/textarea';
+import BlurText from '../ui/BlurText';
 import { cn } from '../../lib/utils';
 
 const CHANNELS = [
@@ -174,11 +175,6 @@ const ContactForm: React.FC = () => {
           <Terminal className="w-3.5 h-3.5 text-[#C6FF00]" />
           <span className="uppercase tracking-widest">project_inquiry.form</span>
           <span className="text-zinc-600 hidden sm:inline">— new_brief</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#C6FF00]/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
-          <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
         </div>
       </div>
 
@@ -431,11 +427,16 @@ export const ContactPage: React.FC = () => {
                 <span className="uppercase tracking-widest font-bold">// ACCEPTING NEW PROJECTS</span>
               </div>
 
-              <h1 className="font-syne font-extrabold text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-white leading-[0.95]">
-                Let's Build
-                <br />
-                <span className="text-[#C6FF00]">Your Website</span>
-              </h1>
+              <BlurText
+                as="h1"
+                text="Let's Build Your Website"
+                highlight={['Your Website']}
+                animateBy="words"
+                direction="top"
+                delay={110}
+                stepDuration={0.4}
+                className="font-syne font-extrabold text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-white leading-[0.95] justify-center"
+              />
 
               <p className="mt-6 max-w-2xl font-mono-code text-xs sm:text-sm text-zinc-400 leading-relaxed">
                 Tell us about your project. We're a full-service web design and development agency

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Disc } from 'lucide-react';
+import BlurText from './ui/BlurText';
 
 interface TestimonialsSectionProps {
   playBeep?: (freq?: number) => void;
@@ -94,9 +95,16 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ playBe
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-white/15 pb-5">
-            <h2 className="font-syne font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-tight leading-none text-white">
-              WHAT OUR <span className="text-[#C6FF00]">CLIENTS SAY</span>
-            </h2>
+            <BlurText
+              as="h2"
+              text="WHAT OUR CLIENTS SAY"
+              highlight={['CLIENTS SAY']}
+              animateBy="words"
+              direction="top"
+              delay={110}
+              stepDuration={0.4}
+              className="font-syne font-extrabold text-2xl sm:text-4xl md:text-5xl lg:text-6xl uppercase tracking-tight leading-none text-white"
+            />
 
             <div className="font-mono-code text-[11px] sm:text-xs text-zinc-400 flex items-center gap-2">
               <Disc className="w-3.5 h-3.5 text-[#C6FF00] animate-spin-slow" />

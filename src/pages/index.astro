@@ -43,7 +43,7 @@ const jsonLd = [faqLd, breadcrumbLd];
 ---
 
 <Layout title={title} description={description} jsonLd={jsonLd}>
-  <MotionProvider client:idle />
+  <MotionProvider client:idle={{ timeout: 2500 }} />
 
   <div class="min-h-screen w-full bg-black text-white relative font-geist selection:bg-[#C6FF00] selection:text-black flex flex-col justify-between overflow-x-clip">
     <div
@@ -52,10 +52,10 @@ const jsonLd = [faqLd, breadcrumbLd];
     />
 
     <div class="relative z-10 flex-1 flex flex-col justify-between">
-      <Navbar client:idle pathname="/" />
+      <Navbar client:idle={{ timeout: 2500 }} pathname="/" />
 
       <main class="flex-1 flex flex-col">
-        <HeroSection client:idle />
+        <HeroSection client:idle={{ timeout: 2500 }} />
         <LogoStripSection client:visible />
         <ProjectCardsSection client:visible />
         <ProcessSection client:visible />

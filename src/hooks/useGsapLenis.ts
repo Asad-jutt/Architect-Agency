@@ -158,10 +158,26 @@ export function useGsapLenis() {
       window.addEventListener('architect:section-mounted', handleSectionMounted);
     }
 
+    // Below-fold sections are render-skipped until they approach the viewport
+    // (content-visibility: auto). When one renders, its real height replaces
+    // the reserved height, so refresh trigger positions to keep the
+    // scroll-reveal animations firing at the correct scroll offsets.
+    let sectionObserver: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      sectionObserver = new IntersectionObserver(
+        () => ScrollTrigger.refresh(),
+        { rootMargin: '1000px' }
+      );
+      document.querySelectorAll('main section').forEach((section) => {
+        sectionObserver?.observe(section);
+      });
+    }
+
     return () => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('architect:section-mounted', handleSectionMounted);
       }
+      if (sectionObserver) sectionObserver.disconnect();
       ctx.revert();
       if (lenis) lenis.destroy();
       if (updateTicker) gsap.ticker.remove(updateTicker);

@@ -15,6 +15,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { ProjectData, PROJECTS_LIST } from '../../data/projectsData';
+import BlurText from '../ui/BlurText';
 
 interface ProjectDetailPageProps {
   project: ProjectData;
@@ -88,11 +89,17 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
           </div>
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div className="space-y-2">
-              <h1 className="font-syne font-extrabold text-3xl sm:text-5xl md:text-6xl text-white uppercase tracking-tight leading-none">
-                {project.title}
-              </h1>
-              <p className="font-space text-lg sm:text-xl text-zinc-300 font-medium">
+            <div className="space-y-2 min-w-0">
+              <BlurText
+                as="h1"
+                text={project.title}
+                animateBy="words"
+                direction="top"
+                delay={90}
+                stepDuration={0.4}
+                className="font-syne font-extrabold text-2xl sm:text-4xl md:text-5xl text-white uppercase tracking-tight leading-none break-words"
+              />
+              <p className="font-space text-base sm:text-lg lg:text-xl text-zinc-300 font-medium break-words">
                 {project.subtitle}
               </p>
             </div>
@@ -115,7 +122,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({
         </div>
 
         {/* Main Display Canvas */}
-        <div className="relative w-full h-[320px] sm:h-[480px] md:h-[580px] border-2 border-white/20 hover:border-[#C6FF00] overflow-hidden bg-zinc-950 transition-colors">
+        <div className="relative w-full h-[260px] sm:h-[380px] md:h-[460px] border-2 border-white/20 hover:border-[#C6FF00] overflow-hidden bg-zinc-950 transition-colors">
           <img
             src={selectedImage}
             alt={project.title}

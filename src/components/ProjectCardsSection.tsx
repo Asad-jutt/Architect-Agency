@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUpRight, ArrowRight } from 'lucide-react';
+import BlurText from './ui/BlurText';
 import { CardCarousel } from './ui/card-carousel';
 import { PROJECTS_LIST, ProjectData } from '../data/projectsData';
 
@@ -122,9 +123,15 @@ export const ProjectCardsSection: React.FC<ProjectCardsSectionProps> = ({
       <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 mb-6 flex flex-wrap items-center justify-between gap-3 font-mono-code">
         <div className="flex items-center gap-3">
           <span className="w-2.5 h-2.5 bg-[#C6FF00] inline-block animate-pulse" />
-          <h2 className="text-xs sm:text-sm font-bold tracking-[2px] text-white/80 uppercase">
-            SELECTED_WORKS // CAROUSEL_TRACK
-          </h2>
+          <BlurText
+            as="h2"
+            text="SELECTED_WORKS // CAROUSEL_TRACK"
+            animateBy="words"
+            direction="top"
+            delay={90}
+            stepDuration={0.4}
+            className="text-xs sm:text-sm font-bold tracking-[2px] text-white/80 uppercase"
+          />
         </div>
 
         <button

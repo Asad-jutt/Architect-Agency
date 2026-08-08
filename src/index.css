@@ -287,19 +287,23 @@
   min-height: 100dvh;
 }
 
+/* Skip rendering sections below the first fold until they scroll near the
+   viewport. Cuts initial layout/paint work (the main-thread cost behind slow
+   first paint). The hero (first section) is kept fully rendered for LCP.
+   Note: every section is wrapped in an <astro-island> element (and <main>
+   also contains a <script>), so the selector targets the sections inside all
+   islands except the first under <main>. */
+main > astro-island:not(:first-of-type) > section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100vh;
+  contain-intrinsic-size: auto 100dvh;
+}
+
 /* Prevent horizontal overflow on any viewport (small phones, rotated devices) */
 html,
 body {
   overflow-x: clip;
   max-width: 100%;
-}
-
-/* Skip rendering sections below the first fold until they scroll near the
-   viewport. Cuts initial layout/paint work on mobile. The hero (first child)
-   and the logo strip (second child) are kept fully rendered for LCP. */
-main > section:nth-child(n+3) {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 800px;
 }
 
 /* Respect safe-area insets on notched phones */

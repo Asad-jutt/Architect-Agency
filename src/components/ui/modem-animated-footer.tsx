@@ -10,6 +10,7 @@ import {
   Shield,
   Layers
 } from 'lucide-react';
+import BlurText from './BlurText';
 
 export interface FooterLink {
   label: string;
@@ -123,9 +124,16 @@ export const Footer: React.FC<FooterProps> = ({
               {/* Brand Title & Description */}
               <div className="space-y-3 flex flex-col items-center max-w-2xl">
                 <div className="flex items-center gap-2">
-                  <span className="font-syne font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight uppercase">
-                    {brandName}
-                  </span>
+                  <BlurText
+                    as="span"
+                    text={brandName}
+                    highlight={['EXE']}
+                    animateBy="letters"
+                    direction="top"
+                    delay={70}
+                    stepDuration={0.4}
+                    className="font-syne font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight uppercase"
+                  />
                 </div>
                 <p className="font-mono-code text-xs sm:text-sm text-zinc-400 font-medium text-center leading-relaxed px-4 sm:px-0">
                   {brandDescription}

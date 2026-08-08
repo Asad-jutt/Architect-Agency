@@ -26,7 +26,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section 
-      className="w-full max-w-[1280px] mx-auto relative overflow-hidden flex flex-col justify-between min-h-hero xl:pt-30 xl:pb-20 pb-30"
+      className="w-full max-w-[1280px] mx-auto relative overflow-hidden flex flex-col justify-between min-h-hero xl:pt-30 pb-30 pt-3 xl:pb-30"
       style={{
         paddingTop: 'clamp(2.5rem, 6vh, 5rem)',
         paddingBottom: 'clamp(2rem, 6vh, 5rem)',
@@ -113,12 +113,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* CTA and Details (Asymmetrical Grid) */}
       <div 
-        className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end relative z-30 md:flex md:flex-row md:items-end md:justify-between"
+        className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end relative z-30 md:flex md:flex-row md:items-end md:justify-between xl:mb-15"
         style={{ paddingTop: 'clamp(1.5rem, 4vh, 2.5rem)' }}
       >
         {/* Left Column: Bio & Magnetic Acid Green CTA */}
         <div 
-          className="lg:col-span-7 flex flex-col relative z-30 md:flex-1 items-start gap-2 mb-2"
+          className="lg:col-span-7 flex flex-col relative z-30 md:flex-1 items-start gap-2 mb-2 xl:mb-2"
           style={{ gap: 'clamp(1rem, 2.5vh, 2rem)' }}
         >
           {/* Vertical Border Container */}

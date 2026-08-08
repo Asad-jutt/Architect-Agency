@@ -45,6 +45,11 @@ export const startSilkAnimation = (canvas: HTMLCanvasElement): (() => void) => {
   const FRAME_INTERVAL = 1000 / 30;
   let lastFrameTime = 0;
 
+  // Reused across frames so the 30fps loop does zero per-frame allocations.
+  // Recreated only when the canvas resizes; pixels are identical to allocating
+  // fresh each frame.
+  let imageBuffer: ImageData | null = null;
+
   // Paint a single frame of the silk texture. Kept separate from the animation
   // loop so mobile can render one static frame and skip looping entirely.
   const paint = () => {
@@ -63,8 +68,10 @@ export const startSilkAnimation = (canvas: HTMLCanvasElement): (() => void) => {
     ctx.fillRect(0, 0, width, height);
 
     // Create silk-like pattern
-    const imageData = ctx.createImageData(width, height);
-    const data = imageData.data;
+    if (!imageBuffer || imageBuffer.width !== width || imageBuffer.height !== height) {
+      imageBuffer = ctx.createImageData(width, height);
+    }
+    const data = imageBuffer.data;
 
     const step = 2;
 
@@ -114,7 +121,7 @@ export const startSilkAnimation = (canvas: HTMLCanvasElement): (() => void) => {
       }
     }
 
-    ctx.putImageData(imageData, 0, 0);
+    ctx.putImageData(imageBuffer, 0, 0);
 
     // Add subtle overlay for depth
     const overlayGradient = ctx.createRadialGradient(

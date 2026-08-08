@@ -1,5 +1,6 @@
 import React from 'react';
 import { HelpCircle, Terminal } from 'lucide-react';
+import BlurText from './BlurText';
 
 export interface FaqItem {
   id: string;
@@ -180,9 +181,16 @@ export const FaqSection: React.FC<{ data?: FaqData }> = ({ data = DEFAULT_FAQ_DA
           <span className="uppercase tracking-widest font-bold">// KNOWLEDGE_BASE // PROTOCOL_FAQ</span>
         </div>
 
-        <h2 className="font-syne font-extrabold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight text-white leading-tight">
-          F<span className="text-[#C6FF00]">AQ</span>
-        </h2>
+        <BlurText
+          as="h2"
+          text="FAQ"
+          highlight={['AQ']}
+          animateBy="letters"
+          direction="top"
+          delay={120}
+          stepDuration={0.45}
+          className="font-syne font-extrabold text-3xl sm:text-5xl md:text-6xl uppercase tracking-tight text-white leading-tight justify-center"
+        />
 
         <p className="mt-2 font-mono-code text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto uppercase tracking-wide">
           {data.mainSubtitle}

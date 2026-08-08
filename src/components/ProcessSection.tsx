@@ -1,5 +1,6 @@
 import React from 'react';
 import { Terminal, Cpu, Zap, Rocket, CheckCircle2, ArrowRight } from 'lucide-react';
+import BlurText from './ui/BlurText';
 import {
   ContainerScroll,
   ContainerSticky,
@@ -80,12 +81,18 @@ export const ProcessSection: React.FC<ProcessSectionProps> = ({ playBeep = () =>
             <span className="w-2.5 h-2.5 bg-[#C6FF00] inline-block animate-pulse" />
             <span className="font-bold tracking-[2px] uppercase">// 02. METHODOLOGY & TIMELINE</span>
           </div>
-          
+
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <h2 className="font-syne font-black text-3xl sm:text-5xl md:text-6xl text-white uppercase tracking-tight leading-[0.95]">
-              HOW WE ARCHITECT <br />
-              <span className="text-[#C6FF00]">HIGH-PERFORMANCE</span> SITES
-            </h2>
+            <BlurText
+              as="h2"
+              text="HOW WE ARCHITECT HIGH-PERFORMANCE SITES"
+              highlight={['HIGH-PERFORMANCE']}
+              animateBy="words"
+              direction="top"
+              delay={110}
+              stepDuration={0.4}
+              className="font-syne font-black text-3xl sm:text-5xl md:text-6xl text-white uppercase tracking-tight leading-[0.95]"
+            />
             <p className="font-space font-light text-zinc-400 text-sm sm:text-base max-w-md leading-relaxed">
               Our 4-step horizontal scroll journey turns creative ideas into uncompromising, hyper-fast digital experiences.
             </p>

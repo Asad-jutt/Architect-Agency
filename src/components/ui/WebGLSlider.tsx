@@ -962,8 +962,9 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
 
       if (requestRender) requestRender();
 
-      // Show the first slide as soon as its texture arrives, then load the
-      // remaining slides in the background so nothing blocks initial paint.
+      // Show the first slide as soon as its texture arrives so the page is
+      // never blank, then load the remaining slides in the background so
+      // nothing blocks the initial paint.
       const firstTexture = await loadImageTexture(currentSlides[0].imageUrl).catch(
         () => null
       );
@@ -971,11 +972,17 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
         slideTextures.push(firstTexture);
         shaderMaterial.uniforms.uTexture1.value = firstTexture;
         shaderMaterial.uniforms.uTexture1Size.value = firstTexture.userData.size;
+        sliderEnabled = true;
+        updateCounter(0);
+        updateNavigationState(0);
         if (requestRender) requestRender();
       }
 
+      // Load only what the first render + initial transition need (slides 1-2).
+      // Remaining slides load in idle time so they don't contend with the
+      // first paint or the critical slide-1 texture on the network.
       const remainingResults = await Promise.all(
-        currentSlides.slice(1).map((s) => loadImageTexture(s.imageUrl).catch(() => null))
+        currentSlides.slice(1, 2).map((s) => loadImageTexture(s.imageUrl).catch(() => null))
       );
       remainingResults.forEach((texture) => {
         if (texture) slideTextures.push(texture);
@@ -985,11 +992,24 @@ export const WebGLSlider: React.FC<WebGLSliderProps> = ({
         shaderMaterial.uniforms.uTexture2.value = slideTextures[1];
         shaderMaterial.uniforms.uTexture2Size.value = slideTextures[1].userData.size;
         texturesLoaded = true;
-        sliderEnabled = true;
-        updateCounter(0);
-        updateNavigationState(0);
         if (requestRender) requestRender();
         safeStartTimer(500);
+      }
+
+      // Background-load the remaining slides once the browser is idle so
+      // transitions to later slides still work as soon as possible.
+      const loadRest = async () => {
+        const restResults = await Promise.all(
+          currentSlides.slice(2).map((s) => loadImageTexture(s.imageUrl).catch(() => null))
+        );
+        restResults.forEach((texture) => {
+          if (texture) slideTextures.push(texture);
+        });
+      };
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(() => loadRest(), { timeout: 3000 });
+      } else {
+        setTimeout(loadRest, 500);
       }
     };
 
