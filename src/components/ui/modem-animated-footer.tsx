@@ -73,6 +73,7 @@ export const Footer: React.FC<FooterProps> = ({
     { label: "// OUR_PROCESS", href: "/#section-process" },
     { label: "// OPERATIVES", href: "/#section-team" },
     { label: "// PROTOCOL_FAQ", href: "/#section-faq" },
+    { label: "// INITIATE_PROJECT", href: "/contact" },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -122,8 +123,8 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
 
               {/* Brand Title & Description */}
-              <div className="space-y-3 flex flex-col items-center max-w-2xl">
-                <div className="flex items-center gap-2">
+              <div className="space-y-3 flex flex-col items-center w-full max-w-2xl">
+                <div className="flex items-center justify-center gap-2 w-full px-2">
                   <BlurText
                     as="span"
                     text={brandName}
@@ -132,7 +133,7 @@ export const Footer: React.FC<FooterProps> = ({
                     direction="top"
                     delay={70}
                     stepDuration={0.4}
-                    className="font-syne font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight uppercase"
+                    className="font-syne font-extrabold text-xl sm:text-3xl md:text-4xl lg:text-5xl text-white tracking-tight uppercase justify-center break-words"
                   />
                 </div>
                 <p className="font-mono-code text-xs sm:text-sm text-zinc-400 font-medium text-center leading-relaxed px-4 sm:px-0">
